@@ -3,8 +3,8 @@ import { Text, SafeAreaView, StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 const UpperNav = () => {
 	return (
-		<SafeAreaView style={styles.upperNavOut}>
-			<View style={styles.upperNavIn}>
+		<SafeAreaView style={styles.container}>
+			<View style={styles.upperNav}>
 				<Text style={styles.text}>Cafe Lingua</Text>
 				<Icon name='settings' size={25} color='white' />
 			</View>
@@ -12,11 +12,11 @@ const UpperNav = () => {
 	);
 };
 const styles = StyleSheet.create({
-	upperNavOut: {
-		height: 130,
+	container: {
+		height: '15%',
 		backgroundColor: '#3d475e',
 	},
-	upperNavIn: {
+	upperNav: {
 		padding: 15,
 		justifyContent: 'space-between',
 		flexDirection: 'row',
