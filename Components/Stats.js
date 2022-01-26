@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-	View,
-	StyleSheet,
-	Image,
-	Text,
-	Pressable,
-	TouchableOpacity,
-} from 'react-native';
-
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 const Stats = () => {
 	return (
 		<View style={styles.container}>
@@ -15,6 +8,7 @@ const Stats = () => {
 				<Image style={styles.flag} source={require('../assets/french.png')} />
 				<TouchableOpacity style={styles.button}>
 					<Text style={styles.learn}>Learn all</Text>
+					<Icon name='play' size={40} color='white' />
 				</TouchableOpacity>
 			</View>
 			<View style={styles.column}>
@@ -64,8 +58,9 @@ const styles = StyleSheet.create({
 		padding: 3,
 	},
 	button: {
-		width: '80%',
-		backgroundColor: 'purple',
+		flexDirection: 'row',
+		padding: 10,
+		backgroundColor: '#FF8DA1',
 		marginTop: 15,
 		alignItems: 'center',
 		borderRadius: 10,

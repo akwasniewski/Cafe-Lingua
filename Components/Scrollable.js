@@ -1,12 +1,12 @@
 import React from 'react';
 import {
 	View,
-	SectionList,
 	StyleSheet,
 	Text,
-	StatusBar,
 	FlatList,
+	TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import Stats from './Stats';
 const DATA = [
 	{
@@ -23,34 +23,52 @@ const DATA = [
 	},
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'First Item',
+		title: 'Fourth Item',
 	},
 	{
 		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Second Item',
+		title: 'Fifth Item',
 	},
 	{
 		id: '58694a0f-3da1-471f-bd96-145571e29d72',
-		title: 'Third Item',
+		title: 'Sixth Item',
 	},
 	{
 		id: 'bd7a3bea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'First Item',
+		title: 'Seventh item',
 	},
 	{
 		id: '3ac683fc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Second Item',
+		title: 'Eight Item',
 	},
 	{
 		id: '58694a3f-3da1-471f-bd96-145571e29d72',
-		title: 'Third Item',
+		title: 'Nineth Item',
 	},
 ];
 
 const Item = ({ title }) => (
-	<View style={styles.item}>
-		<Text style={styles.title}>{title}</Text>
-	</View>
+	<TouchableOpacity>
+		<View style={styles.item}>
+			<View style={styles.info}>
+				<Text style={styles.title}>{title}</Text>
+				<Text>Cards: </Text>
+			</View>
+			<View style={styles.controls}>
+				<TouchableOpacity>
+					<View style={styles.learnButton}>
+						<Text style={styles.learn}>Learn</Text>
+						<Icon name='play' size={30} color='white' />
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity>
+					<View style={styles.editButton}>
+						<Icon name='edit' size={30} color='white' />
+					</View>
+				</TouchableOpacity>
+			</View>
+		</View>
+	</TouchableOpacity>
 );
 
 const Scrollable = () => {
@@ -73,13 +91,44 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	item: {
-		backgroundColor: '#f9c2ff',
+		backgroundColor: '#d3d3d3',
 		padding: 20,
 		marginVertical: 8,
 		marginHorizontal: 16,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		borderRadius: 10,
+	},
+	info: {
+		width: '50%',
+	},
+	learnButton: {
+		flexDirection: 'row',
+		backgroundColor: '#FF8DA1',
+		marginTop: 15,
+		alignItems: 'center',
+		borderRadius: 10,
+		padding: 10,
+	},
+	editButton: {
+		marginTop: 15,
+		marginLeft: 10,
+		alignItems: 'center',
+		borderRadius: 10,
+		padding: 10,
+		backgroundColor: '#67B7D1',
+	},
+	learn: {
+		color: 'white',
+		fontSize: 25,
 	},
 	title: {
-		fontSize: 32,
+		fontSize: 25,
+	},
+	controls: {
+		flexDirection: 'row',
+		width: '50%',
 	},
 });
 
