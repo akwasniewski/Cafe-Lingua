@@ -31,7 +31,7 @@ const Stats = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		height: '20%',
+		paddingTop: 40,
 		padding: 15,
 		backgroundColor: '#fff',
 		flexDirection: 'row',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 	button: {
 		width: '80%',
 		backgroundColor: 'purple',
-		marginTop: 10,
+		marginTop: 15,
 		alignItems: 'center',
 		borderRadius: 10,
 	},
