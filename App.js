@@ -1,26 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
-import UpperNav from './Components/UpperNav';
-import LowerNav from './Components/LowerNav';
-import Stats from './Components/Stats';
-import Scrollable from './Components/Scrollable';
+import React from 'react';
+import { NavigationContainer, StackActions } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View } from 'react-native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+const Stack = createNativeStackNavigator();
+import HomeScreen from './Screens/HomeScreen';
+import SettingsScreen from './Screens/SettingsScreen';
+import Icon from 'react-native-vector-icons/Feather';
+const Tab = createMaterialBottomTabNavigator();
 export default function App() {
 	return (
-		<View style={styles.container}>
-			<UpperNav />
-			<Scrollable />
-			<LowerNav />
-			<StatusBar style='auto' />
-		</View>
+		<>
+			<NavigationContainer>
+				<Tab.Navigator
+					barStyle={{
+						backgroundColor: '#3d475e',
+					}}
+					activeColor='#FF8DA1'
+					inactiveColor='white'>
+					<Tab.Screen
+						name='Home'
+						component={HomeScreen}
+						options={{
+							tabBarLabel: 'Home',
+							tabBarIcon: ({ color }) => (
+								<Icon name='home' color={color} size={26} />
+							),
+						}}
+					/>
+					<Tab.Screen
+						name='Settings'
+						component={SettingsScreen}
+						options={{
+							tabBarLabel: 'Settings',
+							tabBarIcon: ({ color }) => (
+								<Icon name='settings' color={color} size={26} />
+							),
+						}}
+					/>
+				</Tab.Navigator>
+			</NavigationContainer>
+		</>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-	},
-	scroll: {
-		height: '70%',
-	},
-});
