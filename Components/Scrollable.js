@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
 	View,
 	StyleSheet,
@@ -47,8 +49,13 @@ const DATA = [
 	},
 ];
 
-const Item = ({ title }) => (
-	<TouchableOpacity>
+const Item = ({ title, navigation }) => (
+	<TouchableOpacity
+		onPress={() => {
+			navigation.navigate('DeckOverview', {
+				title: title,
+			});
+		}}>
 		<View style={styles.item}>
 			<View style={styles.info}>
 				<Text style={styles.title}>{title}</Text>
@@ -71,9 +78,10 @@ const Item = ({ title }) => (
 	</TouchableOpacity>
 );
 
-const Scrollable = () => {
-	const renderItem = ({ item }) => <Item title={item.title} />;
-
+const Scrollable = ({ navigation }) => {
+	const renderItem = ({ item }) => (
+		<Item title={item.title} navigation={navigation} />
+	);
 	return (
 		<View style={styles.container}>
 			<FlatList
