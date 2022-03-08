@@ -3,8 +3,26 @@ import { SectionList, StyleSheet, Text, View } from 'react-native';
 const Stack = createNativeStackNavigator();
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SettingsMain from '../Components/SettingsMain';
-import LoginScreen from './LoginScreen';
-const Home = () => {
+import LoginScreen from '../Components/LoginScreen';
+import LoggedScreen from '../Components/LoggedScreen';
+const SettingsScreen = (props) => {
+	const Login = () => {
+		if (!props.user.email) {
+			return (
+				<LoginScreen
+					user={props.user}
+					setUser={(newUser) => props.setUser(newUser)}
+				/>
+			);
+		} else {
+			return (
+				<LoggedScreen
+					user={props.user}
+					setUser={(newUser) => props.setUser(newUser)}
+				/>
+			);
+		}
+	};
 	return (
 		<Stack.Navigator
 			initialRouteName='SettingsMain'
@@ -14,7 +32,7 @@ const Home = () => {
 				},
 				headerTintColor: '#fff',
 			}}>
-			<Stack.Screen name='SettingsMain' component={LoginScreen} />
+			<Stack.Screen name='SettingsMain' component={Login} />
 		</Stack.Navigator>
 	);
 };
@@ -27,4 +45,4 @@ const styles = StyleSheet.create({
 		height: '70%',
 	},
 });
-export default Home;
+export default SettingsScreen;

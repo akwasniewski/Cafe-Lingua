@@ -1,5 +1,9 @@
 import React from 'react';
-import { NavigationContainer, StackActions } from '@react-navigation/native';
+import {
+	NavigationContainer,
+	StackActions,
+	useLinkProps,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -9,6 +13,12 @@ import SettingsScreen from './Screens/SettingsScreen';
 import Icon from 'react-native-vector-icons/Feather';
 const Tab = createMaterialBottomTabNavigator();
 export default function App() {
+	const [user, setUser] = React.useState([]);
+	const SettingsScreenCall = () => {
+		return (
+			<SettingsScreen user={user} setUser={(newUser) => setUser(newUser)} />
+		);
+	};
 	return (
 		<>
 			<NavigationContainer>
@@ -30,7 +40,7 @@ export default function App() {
 					/>
 					<Tab.Screen
 						name='Settings'
-						component={SettingsScreen}
+						component={SettingsScreenCall}
 						options={{
 							tabBarLabel: 'Settings',
 							tabBarIcon: ({ color }) => (

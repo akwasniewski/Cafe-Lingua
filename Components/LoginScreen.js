@@ -2,12 +2,11 @@ import React from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
-	getAuth,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from 'firebase/auth';
-const auth = getAuth();
-const LoginScreen = () => {
+import { auth } from '../Database/firebase';
+const LoginScreen = (props) => {
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const HandleSignUp = () => {
@@ -16,6 +15,7 @@ const LoginScreen = () => {
 			.then((userCredentials) => {
 				const user = userCredentials.user;
 				console.log(user.email);
+				props.setUser(user);
 			})
 			.catch((error) => alert(error.message));
 	};
@@ -25,11 +25,13 @@ const LoginScreen = () => {
 			.then((userCredentials) => {
 				const user = userCredentials.user;
 				console.log(user.email);
+				props.setUser(user);
 			})
 			.catch((error) => alert(error.message));
 	};
 	return (
 		<KeyboardAvoidingView style={styles.container}>
+			<Text>{props.lol}</Text>
 			<View style={styles.inputContainer}>
 				<TextInput
 					placeholder='Email'
@@ -48,11 +50,11 @@ const LoginScreen = () => {
 					style={styles.input}
 					secureTextEntry
 				/>
-				<TouchableOpacity onPress={HandleLogIn} style={styles.login}>
+				<TouchableOpacity onPress={() => HandleLogIn()} style={styles.login}>
 					<Text style={styles.buttonText}>Log In</Text>
 				</TouchableOpacity>
 			</View>
-			<TouchableOpacity onPress={HandleSignUp} style={styles.signup}>
+			<TouchableOpacity onPress={() => HandleSignUp()} style={styles.signup}>
 				<Text style={styles.buttonText}>Sign Up Instead</Text>
 			</TouchableOpacity>
 		</KeyboardAvoidingView>
