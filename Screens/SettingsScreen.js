@@ -6,22 +6,13 @@ import SettingsMain from '../Components/SettingsMain';
 import LoginScreen from '../Components/LoginScreen';
 import LoggedScreen from '../Components/LoggedScreen';
 const SettingsScreen = (props) => {
-	const Login = () => {
-		if (!props.user.email) {
-			return (
-				<LoginScreen
-					user={props.user}
-					setUser={(newUser) => props.setUser(newUser)}
-				/>
-			);
-		} else {
-			return (
-				<LoggedScreen
-					user={props.user}
-					setUser={(newUser) => props.setUser(newUser)}
-				/>
-			);
-		}
+	const Logged = () => {
+		return (
+			<LoggedScreen
+				user={props.user}
+				setUser={(newUser) => props.setUser(newUser)}
+			/>
+		);
 	};
 	return (
 		<Stack.Navigator
@@ -32,7 +23,7 @@ const SettingsScreen = (props) => {
 				},
 				headerTintColor: '#fff',
 			}}>
-			<Stack.Screen name='SettingsMain' component={Login} />
+			<Stack.Screen name='SettingsMain' component={Logged} />
 		</Stack.Navigator>
 	);
 };

@@ -5,17 +5,26 @@ import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../Database/firebase';
 const LoginScreen = (props) => {
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
-	const HandleSignUp = () => {
+	const SaveUser = async (user) => {
+		console.log(user.email);
+		props.setUser(user);
+		try {
+			await AsyncStorage.setItem('user', JSON.stringify(user));
+		} catch (error) {
+			alert(error.message);
+		}
+	};
+	const HandleSignUp = async () => {
 		console.log(email, password);
 		createUserWithEmailAndPassword(auth, email, password)
 			.then((userCredentials) => {
 				const user = userCredentials.user;
-				console.log(user.email);
-				props.setUser(user);
+				SaveUser(user);
 			})
 			.catch((error) => alert(error.message));
 	};
@@ -24,8 +33,7 @@ const LoginScreen = (props) => {
 		signInWithEmailAndPassword(auth, email, password)
 			.then((userCredentials) => {
 				const user = userCredentials.user;
-				console.log(user.email);
-				props.setUser(user);
+				SaveUser(user);
 			})
 			.catch((error) => alert(error.message));
 	};

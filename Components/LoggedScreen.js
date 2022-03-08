@@ -2,12 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { auth } from '../Database/firebase';
 import { signOut } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoggedScreen = (props) => {
+	const DeleteUser = async () => {
+		console.log('logging out');
+		props.setUser('');
+		try {
+			await AsyncStorage.removeItem('user');
+		} catch (error) {
+			alert(error.message);
+		}
+	};
 	const HandleLogOut = () => {
 		signOut(auth)
 			.then(() => {
-				console.log('logging out');
-				props.setUser({});
+				DeleteUser();
 			})
 			.catch((error) => alert(error.message));
 	};
