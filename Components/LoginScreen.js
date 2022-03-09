@@ -12,9 +12,11 @@ const LoginScreen = (props) => {
 	const [password, setPassword] = React.useState('');
 	const SaveUser = async (user) => {
 		console.log(user.email);
-		props.setUser(user);
+		props.setUser(email.toLowerCase());
 		try {
-			await AsyncStorage.setItem('user', JSON.stringify(user));
+			await AsyncStorage.setItem('userEmail', email.toLowerCase());
+			console.log(email);
+			await AsyncStorage.setItem('userPassword', password);
 		} catch (error) {
 			alert(error.message);
 		}

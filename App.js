@@ -15,39 +15,64 @@ const Tab = createMaterialBottomTabNavigator();
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginScreen from './Components/LoginScreen';
 import { useNavigation } from '@react-navigation/native';
+import { auth } from './Database/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 export default function App({ navigation }) {
+	const [userEmail, setUserEmail] = React.useState('');
+	const [userPassword, setUserPassword] = React.useState('');
 	const GetUser = async () => {
 		try {
-			const savedUser = await AsyncStorage.getItem('user');
-			if (savedUser) {
-				const newUser = JSON.parse(savedUser);
-				setUser(newUser);
-			} else setUser('');
+			const savedUserEmail = await AsyncStorage.getItem('userEmail');
+			if (savedUserEmail) {
+				setUserEmail(savedUserEmail);
+				//TODO: login to firebase
+			}
 		} catch (error) {
 			alert(error.message);
 		}
+		try {
+			const savedUserPassword = await AsyncStorage.getItem('userPassword');
+			if (savedUserPassword) {
+				setUserPassword(savedUserPassword);
+				//TODO: login to firebase
+			}
+		} catch (error) {
+			alert(error.message);
+		}
+		if (userEmail != '') {
+			signInWithEmailAndPassword(auth, userEmail, userPassword)
+				.then(console.log('logged in to firebase'))
+				.catch((error) => alert(error.messsage));
+		}
 	};
-	const [user, setUser] = React.useState('');
 	useEffect(() => {
-		GetUser(); //checks whether user is stored on launch
+		GetUser(); //checks whether user is stored on app launch
 	}, [AppState]);
-	console.log('user ' + user.email);
+	console.log('user email: ' + userEmail);
 	const SettingsScreenCall = () => {
 		return (
-			<SettingsScreen user={user} setUser={(newUser) => setUser(newUser)} />
+			<SettingsScreen
+				user={userEmail}
+				setUser={(newUser) => setUserEmail(newUser)}
+			/>
 		);
 	};
 	const LogIn = ({ navigation }) => {
 		useEffect(() => {
-			if (user != '') navigation.navigate('LoggedIn');
-		}, [user]);
+			if (userEmail != '') navigation.navigate('LoggedIn');
+		}, [userEmail]);
 
-		return <LoginScreen user={user} setUser={(newUser) => setUser(newUser)} />;
+		return (
+			<LoginScreen
+				user={userEmail}
+				setUser={(newUser) => setUserEmail(newUser)}
+			/>
+		);
 	};
 	const LoggedIn = ({ navigation }) => {
 		useEffect(() => {
-			if (user == '') navigation.navigate('Login');
-		}, [user]);
+			if (userEmail == '') navigation.navigate('Login');
+		}, [userEmail]);
 
 		return (
 			<Tab.Navigator
