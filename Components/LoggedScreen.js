@@ -7,7 +7,7 @@ import { UserInfo } from 'firebase/auth';
 const LoggedScreen = (props) => {
 	const DeleteUser = async () => {
 		console.log('logging out');
-		props.setUser('');
+		props.setUserEmail('');
 		try {
 			await AsyncStorage.removeItem('userEmail');
 			await AsyncStorage.removeItem('userPassword');

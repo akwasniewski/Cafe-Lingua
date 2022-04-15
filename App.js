@@ -48,12 +48,16 @@ export default function App({ navigation }) {
 	useEffect(() => {
 		GetUser(); //checks whether user is stored on app launch
 	}, [AppState]);
+	useEffect(() => {
+		const user = auth.currentUser;
+		console.log('firebaseuser' + user);
+	}, [userEmail]);
 	console.log('user email: ' + userEmail);
 	const SettingsScreenCall = () => {
 		return (
 			<SettingsScreen
 				user={userEmail}
-				setUser={(newUser) => setUserEmail(newUser)}
+				setUserEmail={(newUser) => setUserEmail(newUser)}
 			/>
 		);
 	};
@@ -65,7 +69,7 @@ export default function App({ navigation }) {
 		return (
 			<LoginScreen
 				user={userEmail}
-				setUser={(newUser) => setUserEmail(newUser)}
+				setUserEmail={(newUser) => setUserEmail(newUser)}
 			/>
 		);
 	};

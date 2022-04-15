@@ -10,7 +10,7 @@ const SettingsScreen = (props) => {
 		return (
 			<LoggedScreen
 				user={props.user}
-				setUser={(newUser) => props.setUser(newUser)}
+				setUserEmail={(newUser) => props.setUserEmail(newUser)}
 			/>
 		);
 	};
