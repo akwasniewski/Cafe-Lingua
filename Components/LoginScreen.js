@@ -41,7 +41,6 @@ const LoginScreen = (props) => {
 	};
 	return (
 		<KeyboardAvoidingView style={styles.container}>
-			<Text>{props.lol}</Text>
 			<View style={styles.inputContainer}>
 				<TextInput
 					placeholder='Email'
