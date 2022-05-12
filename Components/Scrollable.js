@@ -13,16 +13,16 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Stats from './Stats';
-const Item = ({ title, cardCount, navigation }) => (
+const Item = ({ deckName, cardCount, navigation }) => (
 	<TouchableOpacity
 		onPress={() => {
 			navigation.navigate('DeckOverview', {
-				title: title,
+				deckName: deckName,
 			});
 		}}>
 		<View style={styles.item}>
 			<View style={styles.info}>
-				<Text style={styles.title}>{title}</Text>
+				<Text style={styles.title}>{deckName}</Text>
 				<Text>Cards: {cardCount}</Text>
 			</View>
 			<View style={styles.controls}>
@@ -58,7 +58,7 @@ const Scrollable = ({ navigation }) => {
 	}, []);
 	const renderItem = ({ item }) => (
 		<Item
-			title={item.deckName}
+			deckName={item.deckName}
 			cardCount={item.cardCount}
 			navigation={navigation}
 		/>
