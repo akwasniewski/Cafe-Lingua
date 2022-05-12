@@ -1,14 +1,20 @@
 import React from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { setDoc, doc, collection } from 'firebase/firestore';
+import {
+	setDoc,
+	doc,
+	collection,
+	updateDoc,
+	increment,
+} from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 const AddCards = ({ route, navigation }) => {
 	const { deckName } = route.params;
 	const [front, setFront] = React.useState('');
 	const [back, setBack] = React.useState('');
-	const NextCard = (navigation) => {
+	const NextCard = async (navigation) => {
 		try {
 			setDoc(
 				doc(
@@ -25,6 +31,10 @@ const AddCards = ({ route, navigation }) => {
 		} catch (error) {
 			alert(error.message);
 		}
+		await updateDoc(
+			doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),
+			{ cardCount: increment(1) }
+		);
 		setFront('');
 		setBack('');
 	};

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { db } from '../Database/firebase';
+import { userEmailGlobal } from '../App';
 import {
 	View,
 	StyleSheet,
@@ -10,46 +13,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Stats from './Stats';
-const DATA = [
-	{
-		id: 'bd3acbea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'First Item',
-	},
-	{
-		id: '3ac38afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Second Item',
-	},
-	{
-		id: '58634a0f-3da1-471f-bd96-145571e29d72',
-		title: 'Third Item',
-	},
-	{
-		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'Fourth Item',
-	},
-	{
-		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Fifth Item',
-	},
-	{
-		id: '58694a0f-3da1-471f-bd96-145571e29d72',
-		title: 'Sixth Item',
-	},
-	{
-		id: 'bd7a3bea-c1b1-46c2-aed5-3ad53abb28ba',
-		title: 'Seventh item',
-	},
-	{
-		id: '3ac683fc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Eight Item',
-	},
-	{
-		id: '58694a3f-3da1-471f-bd96-145571e29d72',
-		title: 'Nineth Item',
-	},
-];
-
-const Item = ({ title, navigation }) => (
+const Item = ({ title, cardCount, navigation }) => (
 	<TouchableOpacity
 		onPress={() => {
 			navigation.navigate('DeckOverview', {
@@ -59,7 +23,7 @@ const Item = ({ title, navigation }) => (
 		<View style={styles.item}>
 			<View style={styles.info}>
 				<Text style={styles.title}>{title}</Text>
-				<Text>Cards: </Text>
+				<Text>Cards: {cardCount}</Text>
 			</View>
 			<View style={styles.controls}>
 				<TouchableOpacity>
@@ -79,14 +43,31 @@ const Item = ({ title, navigation }) => (
 );
 
 const Scrollable = ({ navigation }) => {
+	const [decks, setDecks] = React.useState();
+	useEffect(async () => {
+		const snap = await getDocs(
+			collection(db, 'users/' + userEmailGlobal + '/decks')
+		);
+		const decks = [];
+		snap.forEach((doc) => {
+			const data = doc.data();
+			decks.push(data);
+		});
+		if (decks) setDecks(decks);
+		console.log(decks);
+	}, []);
 	const renderItem = ({ item }) => (
-		<Item title={item.title} navigation={navigation} />
+		<Item
+			title={item.deckName}
+			cardCount={item.cardCount}
+			navigation={navigation}
+		/>
 	);
 	return (
 		<View style={styles.container}>
 			<FlatList
 				ListHeaderComponent={Stats}
-				data={DATA}
+				data={decks}
 				renderItem={renderItem}
 				keyExtractor={(item) => item.id}
 			/>

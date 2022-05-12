@@ -12,6 +12,7 @@ const AddDeck = ({ navigation }) => {
 			setDoc(doc(db, 'users/' + userEmailGlobal + '/decks', deckName), {
 				userEmail: userEmailGlobal,
 				deckName: deckName,
+				cardCount: 0,
 			});
 		} catch (error) {
 			alert(error.message);
