@@ -5,6 +5,7 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import {
+	RefreshControl,
 	View,
 	StyleSheet,
 	Text,
@@ -13,6 +14,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Stats from './Stats';
+const wait = (timeout) => {
+	return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 const Item = ({ deckName, cardCount, navigation }) => (
 	<TouchableOpacity
 		onPress={() => {
@@ -44,6 +49,11 @@ const Item = ({ deckName, cardCount, navigation }) => (
 
 const Scrollable = ({ navigation }) => {
 	const [decks, setDecks] = React.useState();
+	const [refreshing, setRefreshing] = React.useState(false);
+	const Refresh = () => {
+		setRefreshing(true);
+	};
+
 	useEffect(async () => {
 		const snap = await getDocs(
 			collection(db, 'users/' + userEmailGlobal + '/decks')
@@ -55,7 +65,8 @@ const Scrollable = ({ navigation }) => {
 		});
 		if (decks) setDecks(decks);
 		console.log(decks);
-	}, []);
+		wait(1000).then(() => setRefreshing(false));
+	}, [refreshing]);
 	const renderItem = ({ item }) => (
 		<Item
 			deckName={item.deckName}
@@ -70,6 +81,9 @@ const Scrollable = ({ navigation }) => {
 				data={decks}
 				renderItem={renderItem}
 				keyExtractor={(item) => item.id}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={Refresh} />
+				}
 			/>
 		</View>
 	);
