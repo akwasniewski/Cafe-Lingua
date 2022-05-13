@@ -1,5 +1,11 @@
 import React from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
+import {
+	KeyboardAvoidingView,
+	StyleSheet,
+	Text,
+	View,
+	Image,
+} from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
 	createUserWithEmailAndPassword,
@@ -41,31 +47,42 @@ const LoginScreen = (props) => {
 	};
 	return (
 		<KeyboardAvoidingView style={styles.container}>
-			<View style={styles.inputContainer}>
-				<TextInput
-					placeholder='Email'
-					value={email}
-					onChangeText={(newEmail) => {
-						setEmail(newEmail);
-					}}
-					style={styles.input}
+			<View>
+				<Image
+					style={styles.logo}
+					source={require('../assets/cafelingua.png')}
 				/>
-				<TextInput
-					placeholder='Password'
-					value={password}
-					onChangeText={(newPassword) => {
-						setPassword(newPassword);
-					}}
-					style={styles.input}
-					secureTextEntry
-				/>
-				<TouchableOpacity onPress={() => HandleLogIn()} style={styles.login}>
-					<Text style={styles.buttonText}>Log In</Text>
-				</TouchableOpacity>
 			</View>
-			<TouchableOpacity onPress={() => HandleSignUp()} style={styles.signup}>
-				<Text style={styles.buttonText}>Sign Up Instead</Text>
-			</TouchableOpacity>
+			<View style={styles.innerContainer}>
+				<View style={styles.inputContainer}>
+					<TextInput
+						placeholder='Email'
+						value={email}
+						onChangeText={(newEmail) => {
+							setEmail(newEmail);
+						}}
+						style={styles.input}
+					/>
+					<TextInput
+						placeholder='Password'
+						value={password}
+						onChangeText={(newPassword) => {
+							setPassword(newPassword);
+						}}
+						style={styles.input}
+						secureTextEntry
+					/>
+					<TouchableOpacity onPress={() => HandleLogIn()} style={styles.login}>
+						<Text style={styles.buttonText}>Log In</Text>
+					</TouchableOpacity>
+				</View>
+				<TouchableOpacity onPress={() => HandleSignUp()} style={styles.signup}>
+					<Text style={styles.buttonText}>Sign Up Instead</Text>
+				</TouchableOpacity>
+				<View>
+					<Image style={styles.moka} source={require('../assets/moka.png')} />
+				</View>
+			</View>
 		</KeyboardAvoidingView>
 	);
 };
@@ -74,11 +91,28 @@ export default LoginScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center',
+		backgroundColor: '#b0e3f3',
+		paddingTop: 60,
+	},
+	innerContainer: {
+		paddingTop: 50,
 		alignItems: 'center',
+		justifyContent: 'center',
+		height: '100%',
 	},
 	inputContainer: {
 		width: '80%',
+	},
+	moka: {
+		height: 150,
+		width: 150,
+	},
+	logo: {
+		height: 100,
+		width: 195,
+		marginTop: 20,
+		marginLeft: 20,
+		position: 'absolute',
 	},
 	input: {
 		backgroundColor: '#fff',

@@ -50,6 +50,7 @@ const Item = ({ deckName, cardCount, navigation }) => (
 const Scrollable = ({ navigation }) => {
 	const [decks, setDecks] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
+	const [cardCount, setCardCount] = React.useState(0);
 	const Refresh = () => {
 		setRefreshing(true);
 	};
@@ -63,7 +64,14 @@ const Scrollable = ({ navigation }) => {
 			const data = doc.data();
 			decks.push(data);
 		});
-		if (decks) setDecks(decks);
+		if (decks) {
+			var cardCounter = 0;
+			setDecks(decks);
+			decks.forEach((card) => {
+				cardCounter += card.cardCount;
+			});
+			setCardCount(cardCounter);
+		}
 		console.log(decks);
 		wait(1000).then(() => setRefreshing(false));
 	}, [refreshing]);
@@ -74,10 +82,13 @@ const Scrollable = ({ navigation }) => {
 			navigation={navigation}
 		/>
 	);
+	const CallStats = () => {
+		return <Stats cardCount={cardCount} />;
+	};
 	return (
 		<View style={styles.container}>
 			<FlatList
-				ListHeaderComponent={Stats}
+				ListHeaderComponent={CallStats}
 				data={decks}
 				renderItem={renderItem}
 				keyExtractor={(item) => item.id}
