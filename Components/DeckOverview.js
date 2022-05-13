@@ -57,24 +57,25 @@ const styles = StyleSheet.create({
 	},
 	front: {
 		width: '50%',
-		backgroundColor: '#67B7D1',
+		backgroundColor: '#d3d3d3',
 		alignItems: 'center',
 		padding: 10,
 		borderBottomColor: '#FF8DA1',
 		borderBottomWidth: 2,
 	},
 	frontText: {
-		color: 'white',
 		fontSize: 15,
 	},
 	back: {
 		width: '50%',
 		alignItems: 'center',
 		padding: 10,
+		backgroundColor: '#67B7D1',
 		borderBottomColor: '#FF8DA1',
 		borderBottomWidth: 2,
 	},
 	backText: {
+		color: 'white',
 		fontSize: 15,
 	},
 });

@@ -31,7 +31,12 @@ const Item = ({ deckName, cardCount, navigation }) => (
 				<Text>Cards: {cardCount}</Text>
 			</View>
 			<View style={styles.controls}>
-				<TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => {
+						navigation.navigate('Learn', {
+							deckName: deckName,
+						});
+					}}>
 					<View style={styles.learnButton}>
 						<Text style={styles.learn}>Learn</Text>
 						<Icon name='play' size={30} color='white' />

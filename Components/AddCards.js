@@ -25,6 +25,7 @@ const AddCards = ({ route, navigation }) => {
 				{
 					front: front,
 					back: back,
+					weight: 0,
 					timesUsed: 0,
 				}
 			);
