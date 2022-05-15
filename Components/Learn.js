@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
+import { updateDoc } from 'firebase/firestore';
 import LearnCard from './LearnCard';
 const getRandomInt = (max) => {
 	return Math.floor(Math.random() * max);
@@ -26,7 +27,6 @@ const Learn = ({ route, navigation }) => {
 		});
 		if (cards) {
 			setCards(cards);
-			setSavedCards(cards);
 		}
 	}, []);
 	React.useEffect(() => {
@@ -66,10 +66,11 @@ const Learn = ({ route, navigation }) => {
 			console;
 		}
 	};
-	const SaveMastery = async () => {
+	const SaveMastery = new Promise(async (resolve, reject) => {
+		if (!cards) resolve;
 		await cards.forEach(async (card) => {
-			if (card.hasChanged === true) {
-				await UpdateDoc(
+			if (card.hasChanged == true) {
+				await updateDoc(
 					doc(
 						db,
 						'users/' +
@@ -81,15 +82,17 @@ const Learn = ({ route, navigation }) => {
 					),
 					{ weight: card.weight }
 				);
+				console.log('success');
 			}
 		});
-	};
+		resolve();
+	});
 	React.useEffect(async () => {
 		navigation.addListener(
 			'beforeRemove',
 			(e) => {
 				e.preventDefault();
-				SaveMastery().then(navigation.dispatch(e.data.action));
+				SaveMastery.then(navigation.dispatch(e.data.action));
 			},
 			[]
 		);
