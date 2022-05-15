@@ -82,6 +82,7 @@ const Learn = ({ route, navigation }) => {
 					),
 					{ weight: card.weight }
 				);
+				card.hasChanged = false;
 				console.log('success');
 			}
 		});

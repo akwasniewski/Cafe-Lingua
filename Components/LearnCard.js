@@ -23,6 +23,8 @@ const LearnCard = (props) => {
 	const [cardState, setCardState] = React.useState(false);
 	const ChangeBorderColor = (weight) => {
 		switch (weight) {
+			case 0:
+				borderColor = '#3d475e';
 			case 1:
 				borderColor = '#FF8DA1';
 				break;
