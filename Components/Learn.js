@@ -1,10 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { View, Text, StyleSheet, FlatList, Alert, Modal } from 'react-native';
+import {
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	increment,
+} from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import { updateDoc } from 'firebase/firestore';
 import LearnCard from './LearnCard';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 const getRandomInt = (max) => {
 	return Math.floor(Math.random() * max);
 };
@@ -24,6 +31,9 @@ const Learn = ({ route, navigation }) => {
 		snap.forEach((doc) => {
 			const data = doc.data();
 			cards.push(data);
+		});
+		cards.forEach((card) => {
+			card.oldWeight = card.weight;
 		});
 		if (cards) {
 			setCards(cards);
@@ -66,47 +76,61 @@ const Learn = ({ route, navigation }) => {
 			console;
 		}
 	};
-	const SaveMastery = new Promise(async (resolve, reject) => {
-		if (!cards) resolve;
-		await cards.forEach(async (card) => {
-			if (card.hasChanged == true) {
-				await updateDoc(
-					doc(
-						db,
-						'users/' +
-							userEmailGlobal +
-							'/decks/' +
-							deckName +
-							'/cards/' +
-							card.front
-					),
-					{ weight: card.weight }
-				);
-				card.hasChanged = false;
-				console.log('success');
-			}
-		});
-		resolve();
-	});
-	React.useEffect(async () => {
-		navigation.addListener(
-			'beforeRemove',
-			(e) => {
-				e.preventDefault();
-				SaveMastery.then(navigation.dispatch(e.data.action));
-			},
-			[]
+	const SaveMastery = async () => {
+		if (!cards) {
+			console.log('nocards');
+		} else {
+			await cards.forEach(async (card) => {
+				if (card.weight != card.oldWeight) {
+					await updateDoc(
+						doc(
+							db,
+							'users/' +
+								userEmailGlobal +
+								'/decks/' +
+								deckName +
+								'/cards/' +
+								card.front
+						),
+						{ weight: card.weight }
+					);
+					const masteryChange = card.oldWeight - card.weight;
+					console.log('changedMastery');
+					await updateDoc(
+						doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),
+						{ mastery: increment(masteryChange) }
+					);
+				}
+			});
+		}
+	};
+	const ExitButton = () => {
+		return (
+			<View style={styles.buttonContainer}>
+				<TouchableOpacity
+					onPress={() => {
+						SaveMastery();
+						console.log('saved');
+						navigation.goBack();
+					}}
+					style={styles.button}>
+					<Text style={styles.exit}>Save</Text>
+				</TouchableOpacity>
+			</View>
 		);
-	}, [navigation]);
+	};
 	const Output = () => {
 		if (curCard) {
 			return (
-				<LearnCard
-					curCard={curCard}
-					cards={cards}
-					setCards={(newCards) => setCards(newCards)}
-					RandomCard={() => RandomCard()}
-				/>
+				<Modal presentationStyle='overFullScreen'>
+					<LearnCard
+						curCard={curCard}
+						cards={cards}
+						setCards={(newCards) => setCards(newCards)}
+						RandomCard={() => RandomCard()}
+					/>
+					<ExitButton />
+				</Modal>
 			);
 		} else {
 			return <Text>loading</Text>;
@@ -114,5 +138,24 @@ const Learn = ({ route, navigation }) => {
 	};
 	return <Output />;
 };
-
+const styles = StyleSheet.create({
+	buttonContainer: {
+		alignItems: 'center',
+		width: '100%',
+		flex: 1,
+		paddingBottom: 20,
+	},
+	button: {
+		width: '100%',
+		justifyContent: 'center',
+		backgroundColor: '#3d475e',
+		borderRadius: 10,
+	},
+	exit: {
+		color: 'white',
+		padding: 5,
+		fontSize: 30,
+		textAlign: 'center',
+	},
+});
 export default Learn;

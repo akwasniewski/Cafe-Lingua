@@ -2,6 +2,10 @@ import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 const DeckStats = (props) => {
+	console.log('mast' + props.mastery);
+	console.log('cc' + props.cardCount);
+
+	const mastery = 100 * Math.round(props.mastery / props.cardCount);
 	return (
 		<View style={styles.container}>
 			<Text style={styles.deckName}>{props.deckName}</Text>
@@ -14,7 +18,7 @@ const DeckStats = (props) => {
 				</View>
 				<View style={styles.column}>
 					<Text style={styles.stat}>Cards: {props.cardCount}</Text>
-					<Text style={styles.stat}>Mastery: </Text>
+					<Text style={styles.stat}>Mastery: {mastery}</Text>
 				</View>
 			</View>
 		</View>

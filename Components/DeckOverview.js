@@ -4,13 +4,28 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import DeckStats from './DeckStats';
-const Card = ({ front, back }) => {
+const Card = ({ front, back, weight }) => {
+	var borderColor;
+	switch (weight) {
+		case 0:
+			borderColor = '#3d475e';
+			break;
+		case 1:
+			borderColor = '#FF8DA1';
+			break;
+		case 2:
+			borderColor = '#FFFD98';
+			break;
+		case 3:
+			borderColor = '#C6EBBE';
+			break;
+	}
 	return (
 		<View style={styles.card}>
-			<View style={styles.front}>
+			<View style={[styles.front, { borderColor: borderColor }]}>
 				<Text style={styles.frontText}>{front}</Text>
 			</View>
-			<View style={styles.back}>
+			<View style={[styles.back, { borderColor: borderColor }]}>
 				<View>
 					<Text style={styles.backText}>{back}</Text>
 				</View>
@@ -19,7 +34,7 @@ const Card = ({ front, back }) => {
 	);
 };
 const DeckOverview = ({ route, navigation }) => {
-	const { deckName, cardCount } = route.params;
+	const { deckName, cardCount, mastery } = route.params;
 	const [cards, setCards] = React.useState();
 	React.useEffect(async () => {
 		const snap = await getDocs(
@@ -36,12 +51,18 @@ const DeckOverview = ({ route, navigation }) => {
 		if (cards) setCards(cards);
 		console.log(cards);
 	}, []);
-	const renderItem = ({ item }) => <Card front={item.front} back={item.back} />;
+	const renderItem = ({ item }) => (
+		<Card front={item.front} back={item.back} weight={item.weight} />
+	);
 	return (
 		<View style={styles.container}>
 			<FlatList
 				ListHeaderComponent={
-					<DeckStats deckName={deckName} cardCount={cardCount} />
+					<DeckStats
+						deckName={deckName}
+						cardCount={cardCount}
+						mastery={mastery}
+					/>
 				}
 				data={cards}
 				renderItem={renderItem}
@@ -69,6 +90,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderBottomLeftRadius: 10,
 		borderTopLeftRadius: 10,
+		borderBottomWidth: 10,
 	},
 	frontText: {
 		fontSize: 15,
@@ -80,6 +102,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#67B7D1',
 		borderBottomRightRadius: 10,
 		borderTopRightRadius: 10,
+		borderBottomWidth: 10,
 	},
 	backText: {
 		color: 'white',

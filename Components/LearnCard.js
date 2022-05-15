@@ -12,8 +12,8 @@ const LearnCard = (props) => {
 		const newCards = props.cards;
 		for (const card of newCards) {
 			if (card == props.curCard && card.weight != rate) {
+				card.oldWeight = card.weight;
 				card.weight = rate;
-				card.hasChanged = true;
 				break;
 			}
 		}
@@ -25,6 +25,7 @@ const LearnCard = (props) => {
 		switch (weight) {
 			case 0:
 				borderColor = '#3d475e';
+				break;
 			case 1:
 				borderColor = '#FF8DA1';
 				break;
@@ -66,7 +67,7 @@ const LearnCard = (props) => {
 						<View style={styles.rating}>
 							<View style={styles.but1}>
 								<TouchableOpacity onPress={() => Rate(1)} style={styles.button}>
-									<Icon name='frown' color={'000000'} size={26} />
+									<Icon name='frown' color={'#000000'} size={26} />
 								</TouchableOpacity>
 							</View>
 							<View style={styles.but2}>
@@ -94,7 +95,8 @@ export default LearnCard;
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',
-		flex: 1,
+		marginTop: 50,
+		flex: 13,
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 20,

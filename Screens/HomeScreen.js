@@ -15,9 +15,13 @@ const Home = () => {
 				},
 				headerTintColor: '#fff',
 			}}>
-			<Stack.Screen name='Language' component={Scrollable} />
-			<Stack.Screen name='DeckOverview' component={DeckOverview} />
-			<Stack.Screen name='Learn' component={Learn} />
+			<Stack.Group>
+				<Stack.Screen name='Language' component={Scrollable} />
+				<Stack.Screen name='DeckOverview' component={DeckOverview} />
+			</Stack.Group>
+			<Stack.Group>
+				<Stack.Screen name='Learn' component={Learn} />
+			</Stack.Group>
 		</Stack.Navigator>
 	);
 };

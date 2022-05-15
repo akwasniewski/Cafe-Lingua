@@ -18,12 +18,13 @@ const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-const Item = ({ deckName, cardCount, navigation }) => (
+const Item = ({ deckName, cardCount, mastery, navigation }) => (
 	<TouchableOpacity
 		onPress={() => {
 			navigation.navigate('DeckOverview', {
 				deckName: deckName,
 				cardCount: cardCount,
+				mastery: mastery,
 			});
 		}}>
 		<View style={styles.item}>
@@ -79,6 +80,7 @@ const Scrollable = ({ navigation }) => {
 		<Item
 			deckName={item.deckName}
 			cardCount={item.cardCount}
+			mastery={item.mastery}
 			navigation={navigation}
 		/>
 	);

@@ -22,6 +22,7 @@ var userEmailGlobal;
 export default function App({ navigation }) {
 	const [userEmail, setUserEmail] = React.useState('');
 	const [userPassword, setUserPassword] = React.useState('');
+	const [isTabVisible, setTabVisible] = React.useState('');
 	const GetUser = async () => {
 		try {
 			const savedUserEmail = await AsyncStorage.getItem('userEmail');

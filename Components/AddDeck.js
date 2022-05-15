@@ -13,6 +13,7 @@ const AddDeck = ({ navigation }) => {
 				userEmail: userEmailGlobal,
 				deckName: deckName,
 				cardCount: 0,
+				mastery: 0,
 			});
 		} catch (error) {
 			alert(error.message);
