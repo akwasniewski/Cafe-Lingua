@@ -33,20 +33,14 @@ const Item = ({ deckName, cardCount, navigation }) => (
 			</View>
 			<View style={styles.controls}>
 				<TouchableOpacity
+					style={styles.learnButton}
 					onPress={() => {
 						navigation.navigate('Learn', {
 							deckName: deckName,
 						});
 					}}>
-					<View style={styles.learnButton}>
-						<Text style={styles.learn}>Learn</Text>
-						<Icon name='play' size={30} color='white' />
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity>
-					<View style={styles.editButton}>
-						<Icon name='edit' size={30} color='white' />
-					</View>
+					<Text style={styles.learn}>Learn</Text>
+					<Icon name='play' size={30} color='white' />
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -125,29 +119,23 @@ const styles = StyleSheet.create({
 	},
 	learnButton: {
 		flexDirection: 'row',
+		padding: 10,
 		backgroundColor: '#FF8DA1',
 		marginTop: 15,
 		alignItems: 'center',
 		borderRadius: 10,
-		padding: 10,
-	},
-	editButton: {
-		marginTop: 15,
-		marginLeft: 10,
-		alignItems: 'center',
-		borderRadius: 10,
-		padding: 10,
-		backgroundColor: '#67B7D1',
 	},
 	learn: {
 		color: 'white',
 		fontSize: 25,
+		textAlign: 'center',
 	},
 	title: {
 		fontSize: 25,
 	},
 	controls: {
-		flexDirection: 'row',
+		padding: 10,
+		alignItems: 'center',
 		width: '50%',
 	},
 });

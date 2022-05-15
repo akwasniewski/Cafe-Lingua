@@ -58,14 +58,17 @@ const styles = StyleSheet.create({
 	},
 	card: {
 		flexDirection: 'row',
+		alignItems: 'center',
+		paddingTop: 20,
+		paddingHorizontal: 20,
 	},
 	front: {
 		width: '50%',
 		backgroundColor: '#d3d3d3',
 		alignItems: 'center',
 		padding: 10,
-		borderBottomColor: '#FF8DA1',
-		borderBottomWidth: 2,
+		borderBottomLeftRadius: 10,
+		borderTopLeftRadius: 10,
 	},
 	frontText: {
 		fontSize: 15,
@@ -75,8 +78,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		padding: 10,
 		backgroundColor: '#67B7D1',
-		borderBottomColor: '#FF8DA1',
-		borderBottomWidth: 2,
+		borderBottomRightRadius: 10,
+		borderTopRightRadius: 10,
 	},
 	backText: {
 		color: 'white',
