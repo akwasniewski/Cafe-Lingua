@@ -7,32 +7,32 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
 var borderColor = '#3D475E';
 const LearnCard = (props) => {
+	const [curCard, setCurCard] = React.useState();
 	const Rate = (rate) => {
 		const newCards = props.cards;
 		for (const card of newCards) {
-			if (card == props.curCard) {
+			if (card == props.curCard && card.weight != rate) {
 				card.weight = rate;
+				card.hasChanged = true;
 				break;
 			}
 		}
 		props.setCards(newCards);
 		props.RandomCard();
-		ChangeBorderColor();
 	};
 	const [cardState, setCardState] = React.useState(false);
-	const ChangeBorderColor = () => {
-		switch (props.curCard.weight) {
+	const ChangeBorderColor = (weight) => {
+		switch (weight) {
 			case 1:
-				borderColor = '#FFFD98';
-				break;
-			case 2:
-				borderColor = '#C6EBBE';
-				break;
-			case 3:
 				borderColor = '#FF8DA1';
 				break;
+			case 2:
+				borderColor = '#FFFD98';
+				break;
+			case 3:
+				borderColor = '#C6EBBE';
+				break;
 		}
-		console.log('');
 	};
 	const Front = () => {
 		return (
@@ -41,15 +41,16 @@ const LearnCard = (props) => {
 					<TouchableOpacity
 						onPress={() => setCardState(true)}
 						style={styles.frontButton}>
-						<Text style={styles.frontText}>{props.curCard.front}</Text>
+						<Text style={styles.frontText}>{curCard.front}</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
 		);
 	};
 	React.useEffect(() => {
-		ChangeBorderColor();
-	}, []);
+		ChangeBorderColor(props.curCard.weight);
+		setCurCard(props.curCard);
+	}, [props.curCard]);
 	const Back = () => {
 		return (
 			<View style={styles.container}>
@@ -82,7 +83,8 @@ const LearnCard = (props) => {
 			</View>
 		);
 	};
-	if (cardState) return <Back />;
+	if (!curCard) return <></>;
+	else if (cardState) return <Back />;
 	else return <Front />;
 };
 
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
 		alignContent: 'center',
 		justifyContent: 'center',
 		borderRadius: 10,
-		borderWidth: 4,
+		borderWidth: 10,
 		backgroundColor: '#d3d3d3',
 	},
 	frontButton: {
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
 		alignContent: 'center',
 		justifyContent: 'center',
 		borderRadius: 10,
-		borderWidth: 4,
+		borderWidth: 10,
 		backgroundColor: '#67B7D1',
 	},
 	backButton: {
@@ -142,15 +144,15 @@ const styles = StyleSheet.create({
 	},
 	but1: {
 		flex: 1,
-		backgroundColor: '#FFFD98',
+		backgroundColor: '#FF8DA1',
 	},
 	but2: {
 		flex: 1,
-		backgroundColor: '#C6EBBE',
+		backgroundColor: '#FFFD98',
 	},
 	but3: {
 		flex: 1,
-		backgroundColor: '#FF8DA1',
+		backgroundColor: '#C6EBBE',
 	},
 	button: {
 		height: '100%',

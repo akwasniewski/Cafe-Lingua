@@ -12,6 +12,7 @@ const Learn = ({ route, navigation }) => {
 	const [cards, setCards] = React.useState();
 	const [curCard, setCurCard] = React.useState();
 	React.useEffect(async () => {
+		//getting cards from the server
 		const snap = await getDocs(
 			collection(
 				db,
@@ -23,7 +24,10 @@ const Learn = ({ route, navigation }) => {
 			const data = doc.data();
 			cards.push(data);
 		});
-		if (cards) setCards(cards);
+		if (cards) {
+			setCards(cards);
+			setSavedCards(cards);
+		}
 	}, []);
 	React.useEffect(() => {
 		RandomCard();
@@ -62,6 +66,34 @@ const Learn = ({ route, navigation }) => {
 			console;
 		}
 	};
+	const SaveMastery = async () => {
+		await cards.forEach(async (card) => {
+			if (card.hasChanged === true) {
+				await UpdateDoc(
+					doc(
+						db,
+						'users/' +
+							userEmailGlobal +
+							'/decks/' +
+							deckName +
+							'/cards/' +
+							card.front
+					),
+					{ weight: card.weight }
+				);
+			}
+		});
+	};
+	React.useEffect(async () => {
+		navigation.addListener(
+			'beforeRemove',
+			(e) => {
+				e.preventDefault();
+				SaveMastery().then(navigation.dispatch(e.data.action));
+			},
+			[]
+		);
+	}, [navigation]);
 	const Output = () => {
 		if (curCard) {
 			return (
