@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
+import DeckStats from './DeckStats';
 const Card = ({ front, back }) => {
 	return (
 		<View style={styles.card}>
@@ -18,7 +19,7 @@ const Card = ({ front, back }) => {
 	);
 };
 const DeckOverview = ({ route, navigation }) => {
-	const { deckName } = route.params;
+	const { deckName, cardCount } = route.params;
 	const [cards, setCards] = React.useState();
 	React.useEffect(async () => {
 		const snap = await getDocs(
@@ -39,6 +40,9 @@ const DeckOverview = ({ route, navigation }) => {
 	return (
 		<View style={styles.container}>
 			<FlatList
+				ListHeaderComponent={
+					<DeckStats deckName={deckName} cardCount={cardCount} />
+				}
 				data={cards}
 				renderItem={renderItem}
 				keyExtractor={(item) => item.id}

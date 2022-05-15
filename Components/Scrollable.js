@@ -23,6 +23,7 @@ const Item = ({ deckName, cardCount, navigation }) => (
 		onPress={() => {
 			navigation.navigate('DeckOverview', {
 				deckName: deckName,
+				cardCount: cardCount,
 			});
 		}}>
 		<View style={styles.item}>

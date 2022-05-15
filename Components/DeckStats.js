@@ -1,22 +1,21 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-const Stats = (props) => {
+const DeckStats = (props) => {
 	return (
 		<View style={styles.container}>
-			<View style={styles.column}>
-				<Image style={styles.flag} source={require('../assets/french.png')} />
-				<TouchableOpacity style={styles.button}>
-					<Text style={styles.learn}>Learn all</Text>
-					<Icon name='play' size={40} color='white' />
-				</TouchableOpacity>
-			</View>
-			<View style={styles.column}>
-				<View style={styles.languageWrapper}>
-					<Text style={styles.language}>French</Text>
+			<Text style={styles.deckName}>{props.deckName}</Text>
+			<View style={styles.columnContainer}>
+				<View style={styles.column}>
+					<TouchableOpacity style={styles.button}>
+						<Text style={styles.learn}>Learn</Text>
+						<Icon name='play' size={40} color='white' />
+					</TouchableOpacity>
 				</View>
-				<Text style={styles.stat}>Cards: {props.cardCount}</Text>
-				<Text style={styles.stat}>Mastery: </Text>
+				<View style={styles.column}>
+					<Text style={styles.stat}>Cards: {props.cardCount}</Text>
+					<Text style={styles.stat}>Mastery: </Text>
+				</View>
 			</View>
 		</View>
 	);
@@ -27,7 +26,13 @@ const styles = StyleSheet.create({
 		paddingTop: 40,
 		padding: 15,
 		backgroundColor: '#fff',
+	},
+	columnContainer: {
+		marginTop: 10,
 		flexDirection: 'row',
+		paddingTop: 5,
+		borderTopWidth: 3,
+		borderColor: '#3d475e',
 	},
 	column: {
 		flex: 1,
@@ -37,15 +42,10 @@ const styles = StyleSheet.create({
 		height: 73,
 		width: 110,
 	},
-	languageWrapper: {
-		borderBottomWidth: 3,
-		width: '100%',
-		alignItems: 'center',
-		borderColor: '#3d475e',
-	},
-	language: {
+	deckName: {
 		fontSize: 30,
 		color: '#3d475e',
+		textAlign: 'center',
 	},
 	learn: {
 		color: 'white',
@@ -65,4 +65,4 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 });
-export default Stats;
+export default DeckStats;
