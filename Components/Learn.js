@@ -94,7 +94,9 @@ const Learn = ({ route, navigation }) => {
 						),
 						{ weight: card.weight }
 					);
-					const masteryChange = card.oldWeight - card.weight;
+					var masteryChange = 0;
+					if (card.oldWeight != 0) masteryChange = card.weight - card.oldWeight;
+					else masteryChange = card.weight - 1;
 					console.log('changedMastery');
 					await updateDoc(
 						doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),

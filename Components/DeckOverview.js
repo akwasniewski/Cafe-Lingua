@@ -49,7 +49,6 @@ const DeckOverview = ({ route, navigation }) => {
 			cards.push(data);
 		});
 		if (cards) setCards(cards);
-		console.log(cards);
 	}, []);
 	const renderItem = ({ item }) => (
 		<Card front={item.front} back={item.back} weight={item.weight} />

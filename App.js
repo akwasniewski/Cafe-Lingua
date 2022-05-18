@@ -9,7 +9,7 @@ import { View, AppState } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 const Stack = createNativeStackNavigator();
 import HomeScreen from './Screens/HomeScreen';
-import AddDeck from './Screens/AddDeck';
+import AddDeck from './Screens/AddDeck.js';
 import SettingsScreen from './Screens/SettingsScreen';
 const Tab = createMaterialBottomTabNavigator();
 import AsyncStorage from '@react-native-async-storage/async-storage';

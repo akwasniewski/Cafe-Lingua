@@ -5,7 +5,7 @@ const DeckStats = (props) => {
 	console.log('mast' + props.mastery);
 	console.log('cc' + props.cardCount);
 
-	const mastery = 100 * Math.round(props.mastery / props.cardCount);
+	const mastery = Math.round(100 * (props.mastery / (props.cardCount * 2)));
 	return (
 		<View style={styles.container}>
 			<Text style={styles.deckName}>{props.deckName}</Text>
@@ -18,7 +18,7 @@ const DeckStats = (props) => {
 				</View>
 				<View style={styles.column}>
 					<Text style={styles.stat}>Cards: {props.cardCount}</Text>
-					<Text style={styles.stat}>Mastery: {mastery}</Text>
+					<Text style={styles.stat}>Mastery: {mastery}%</Text>
 				</View>
 			</View>
 		</View>
