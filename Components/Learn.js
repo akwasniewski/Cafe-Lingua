@@ -76,11 +76,23 @@ const Learn = ({ route, navigation }) => {
 			console;
 		}
 	};
-	const SaveMastery = async () => {
+	const SaveMastery = async (masteryChange) => {
+		console.log('xdd');
+		if (masteryChange != 0) {
+			console.log('kurwa');
+			await updateDoc(
+				doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),
+				{ mastery: increment(masteryChange) }
+			);
+		}
+	};
+	const Save = async () => {
 		if (!cards) {
 			console.log('nocards');
 		} else {
-			await cards.forEach(async (card) => {
+			var cardsProcessed = 0;
+			var masteryChange = 0;
+			cards.forEach(async (card) => {
 				if (card.weight != card.oldWeight) {
 					await updateDoc(
 						doc(
@@ -94,15 +106,15 @@ const Learn = ({ route, navigation }) => {
 						),
 						{ weight: card.weight }
 					);
-					var masteryChange = 0;
-					if (card.oldWeight != 0) masteryChange = card.weight - card.oldWeight;
-					else masteryChange = card.weight - 1;
-					console.log('changedMastery');
-					await updateDoc(
-						doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),
-						{ mastery: increment(masteryChange) }
-					);
+					if (card.oldWeight != 0)
+						masteryChange += card.weight - card.oldWeight;
+					else masteryChange += card.weight - 1;
 				}
+				cardsProcessed += 1;
+				if (cardsProcessed == cards.length) {
+					SaveMastery(masteryChange);
+				}
+				console.log(cardsProcessed);
 			});
 		}
 	};
@@ -111,7 +123,7 @@ const Learn = ({ route, navigation }) => {
 			<View style={styles.buttonContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						SaveMastery();
+						Save();
 						console.log('saved');
 						navigation.goBack();
 					}}
