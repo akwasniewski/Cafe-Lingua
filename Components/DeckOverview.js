@@ -1,12 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	FlatList,
+	ScrollView,
+	RefreshControl,
+} from 'react-native';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import DeckStats from './DeckStats';
 import Icon from 'react-native-vector-icons/Feather';
 import { Dimensions } from 'react-native';
+
 const windowWidth = Dimensions.get('window').width;
+const wait = (timeout) => {
+	return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 const Card = ({ front, back, weight }) => {
 	var borderColor;
 	switch (weight) {
@@ -51,7 +62,13 @@ const Card = ({ front, back, weight }) => {
 const DeckOverview = ({ route, navigation }) => {
 	const { deckName, cardCount, mastery } = route.params;
 	const [cards, setCards] = React.useState();
-	React.useEffect(async () => {
+	const [refreshing, setRefreshing] = React.useState(false);
+	const Refresh = () => {
+		setRefreshing(true);
+		Fetch();
+		wait(2000).then(() => setRefreshing(false));
+	};
+	const Fetch = async () => {
 		const snap = await getDocs(
 			collection(
 				db,
@@ -64,6 +81,9 @@ const DeckOverview = ({ route, navigation }) => {
 			cards.push(data);
 		});
 		if (cards) setCards(cards);
+	};
+	React.useEffect(() => {
+		Fetch();
 	}, []);
 	const renderItem = ({ item }) => (
 		<Card front={item.front} back={item.back} weight={item.weight} />
@@ -82,6 +102,9 @@ const DeckOverview = ({ route, navigation }) => {
 				data={cards}
 				renderItem={renderItem}
 				keyExtractor={(item) => item.id}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={Refresh} />
+				}
 			/>
 		</View>
 	);

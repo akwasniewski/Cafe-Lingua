@@ -12,7 +12,7 @@ const DeckStats = (props, navigation) => {
 			<View style={styles.columnContainer}>
 				<View style={styles.column}>
 					<TouchableOpacity
-						style={styles.button}
+						style={styles.learnButton}
 						onPress={() => {
 							props.navigation.navigate('Learn', {
 								deckName: props.deckName,
@@ -25,6 +25,28 @@ const DeckStats = (props, navigation) => {
 				<View style={styles.column}>
 					<Text style={styles.stat}>Cards: {props.cardCount}</Text>
 					<Text style={styles.stat}>Mastery: {mastery}%</Text>
+				</View>
+			</View>
+			<View style={styles.util}>
+				<View style={styles.buttons}>
+					{/*<TouchableOpacity
+						style={styles.editButton}
+						onPress={() => {
+							props.navigation.navigate('AddCards', {
+								deckName: props.deckName,
+							});
+						}}>
+						<Icon name='edit' color='#ffffff' size={26} />
+					</TouchableOpacity>*/}
+					<TouchableOpacity
+						style={styles.editButton}
+						onPress={() => {
+							props.navigation.navigate('AddCards', {
+								deckName: props.deckName,
+							});
+						}}>
+						<Icon name='plus' color='#ffffff' size={26} />
+					</TouchableOpacity>
 				</View>
 			</View>
 		</View>
@@ -66,10 +88,22 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		padding: 3,
 	},
-	button: {
+	buttons: {
+		flexDirection: 'row-reverse',
+	},
+	learnButton: {
 		flexDirection: 'row',
 		padding: 10,
 		backgroundColor: '#FF8DA1',
+		marginTop: 15,
+		alignItems: 'center',
+		borderRadius: 10,
+	},
+	editButton: {
+		flexDirection: 'row',
+		padding: 10,
+		marginLeft: 5,
+		backgroundColor: '#3d475e',
 		marginTop: 15,
 		alignItems: 'center',
 		borderRadius: 10,

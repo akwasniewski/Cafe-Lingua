@@ -5,6 +5,7 @@ const Stack = createNativeStackNavigator();
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Scrollable from '../Components/Scrollable';
 import Learn from '../Components/Learn';
+import AddCards from '../Components/AddCards';
 const Home = () => {
 	return (
 		<Stack.Navigator
@@ -18,6 +19,7 @@ const Home = () => {
 			<Stack.Group>
 				<Stack.Screen name='Language' component={Scrollable} />
 				<Stack.Screen name='DeckOverview' component={DeckOverview} />
+				<Stack.Screen name='AddCards' component={AddCards} />
 			</Stack.Group>
 			<Stack.Group>
 				<Stack.Screen name='Learn' component={Learn} />
