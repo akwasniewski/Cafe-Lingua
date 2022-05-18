@@ -52,6 +52,7 @@ const Scrollable = ({ navigation }) => {
 	const [decks, setDecks] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [cardCount, setCardCount] = React.useState(0);
+	const [mastery, setMastery] = React.useState(0);
 	const Refresh = () => {
 		setRefreshing(true);
 	};
@@ -67,11 +68,15 @@ const Scrollable = ({ navigation }) => {
 		});
 		if (decks) {
 			var cardCounter = 0;
+			var totalMastery = 0;
 			setDecks(decks);
-			decks.forEach((card) => {
-				cardCounter += card.cardCount;
+			decks.forEach((deck) => {
+				cardCounter += deck.cardCount;
+				totalMastery += deck.mastery;
 			});
 			setCardCount(cardCounter);
+			if (cardCounter != 0)
+				setMastery(Math.round(100 * (totalMastery / (cardCounter * 2))));
 		}
 		console.log(decks);
 		wait(1000).then(() => setRefreshing(false));
@@ -85,7 +90,7 @@ const Scrollable = ({ navigation }) => {
 		/>
 	);
 	const CallStats = () => {
-		return <Stats cardCount={cardCount} />;
+		return <Stats cardCount={cardCount} mastery={mastery} />;
 	};
 	return (
 		<View style={styles.container}>

@@ -16,7 +16,7 @@ const Stats = (props) => {
 					<Text style={styles.language}>French</Text>
 				</View>
 				<Text style={styles.stat}>Cards: {props.cardCount}</Text>
-				<Text style={styles.stat}>Mastery: </Text>
+				<Text style={styles.stat}>Mastery: {props.mastery}% </Text>
 			</View>
 		</View>
 	);
