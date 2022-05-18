@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-const DeckStats = (props) => {
+const DeckStats = (props, navigation) => {
 	console.log('mast' + props.mastery);
 	console.log('cc' + props.cardCount);
 
@@ -11,7 +11,13 @@ const DeckStats = (props) => {
 			<Text style={styles.deckName}>{props.deckName}</Text>
 			<View style={styles.columnContainer}>
 				<View style={styles.column}>
-					<TouchableOpacity style={styles.button}>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							props.navigation.navigate('Learn', {
+								deckName: props.deckName,
+							});
+						}}>
 						<Text style={styles.learn}>Learn</Text>
 						<Icon name='play' size={40} color='white' />
 					</TouchableOpacity>

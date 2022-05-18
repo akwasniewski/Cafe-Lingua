@@ -76,6 +76,7 @@ const DeckOverview = ({ route, navigation }) => {
 						deckName={deckName}
 						cardCount={cardCount}
 						mastery={mastery}
+						navigation={navigation}
 					/>
 				}
 				data={cards}
