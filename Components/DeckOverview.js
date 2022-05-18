@@ -13,56 +13,79 @@ import { userEmailGlobal } from '../App';
 import DeckStats from './DeckStats';
 import Icon from 'react-native-vector-icons/Feather';
 import { Dimensions } from 'react-native';
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { deleteDoc, updateDoc, increment } from 'firebase/firestore';
 const windowWidth = Dimensions.get('window').width;
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-const Card = ({ front, back, weight }) => {
-	var borderColor;
-	switch (weight) {
-		case 0:
-			borderColor = '#3d475e';
-			break;
-		case 1:
-			borderColor = '#FF8DA1';
-			break;
-		case 2:
-			borderColor = '#FFFD98';
-			break;
-		case 3:
-			borderColor = '#C6EBBE';
-			break;
-	}
-	return (
-		<View style={styles.cardContainer}>
-			<ScrollView
-				contentContainerStyle={styles.card}
-				horizontal
-				pagingEnabled
-				showsHorizontalScrollIndicator={false}
-				decelerationRate='fast'>
-				<View style={styles.cardContainer}>
-					<View style={[styles.front, { borderColor: borderColor }]}>
-						<Text style={styles.frontText}>{front}</Text>
-					</View>
-					<View style={[styles.back, { borderColor: borderColor }]}>
-						<View>
-							<Text style={styles.backText}>{back}</Text>
-						</View>
-					</View>
-				</View>
-				<View style={styles.delete}>
-					<Icon name='trash-2' color='#ffffff' size={26} />
-				</View>
-			</ScrollView>
-		</View>
+const DeleteCard = (deckName, front) => {
+	deleteDoc(
+		doc(
+			db,
+			'users/' + userEmailGlobal + '/decks/' + deckName + '/cards/' + front
+		)
 	);
+
+	updateDoc(doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName), {
+		cardCount: increment(-1),
+	});
 };
 const DeckOverview = ({ route, navigation }) => {
 	const { deckName, cardCount, mastery } = route.params;
 	const [cards, setCards] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
+	const Card = ({ front, back, weight }) => {
+		var borderColor;
+		const [visible, setVisible] = React.useState(true);
+		switch (weight) {
+			case 0:
+				borderColor = '#3d475e';
+				break;
+			case 1:
+				borderColor = '#FF8DA1';
+				break;
+			case 2:
+				borderColor = '#FFFD98';
+				break;
+			case 3:
+				borderColor = '#C6EBBE';
+				break;
+		}
+		return (
+			<View
+				style={[
+					styles.cardContainer,
+					{ visibility: visible ? 'visible' : 'hidden' },
+				]}>
+				<ScrollView
+					contentContainerStyle={styles.card}
+					horizontal
+					pagingEnabled
+					showsHorizontalScrollIndicator={false}
+					decelerationRate='fast'>
+					<View style={styles.cardContainer}>
+						<View style={[styles.front, { borderColor: borderColor }]}>
+							<Text style={styles.frontText}>{front}</Text>
+						</View>
+						<View style={[styles.back, { borderColor: borderColor }]}>
+							<View>
+								<Text style={styles.backText}>{back}</Text>
+							</View>
+						</View>
+					</View>
+					<TouchableOpacity
+						onPress={() => {
+							Refresh();
+							DeleteCard(deckName, front);
+						}}
+						style={styles.delete}>
+						<Icon name='trash-2' color='#ffffff' size={26} />
+					</TouchableOpacity>
+				</ScrollView>
+			</View>
+		);
+	};
 	const Refresh = () => {
 		setRefreshing(true);
 		Fetch();
@@ -134,6 +157,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		padding: 4,
 		borderRadius: 10,
+		height: '100%',
 	},
 	front: {
 		width: windowWidth / 2 - 20,
