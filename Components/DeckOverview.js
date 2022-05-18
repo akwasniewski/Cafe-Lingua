@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import DeckStats from './DeckStats';
+import Icon from 'react-native-vector-icons/Feather';
+import { Dimensions } from 'react-native';
+const windowWidth = Dimensions.get('window').width;
 const Card = ({ front, back, weight }) => {
 	var borderColor;
 	switch (weight) {
@@ -21,15 +24,27 @@ const Card = ({ front, back, weight }) => {
 			break;
 	}
 	return (
-		<View style={styles.card}>
-			<View style={[styles.front, { borderColor: borderColor }]}>
-				<Text style={styles.frontText}>{front}</Text>
-			</View>
-			<View style={[styles.back, { borderColor: borderColor }]}>
-				<View>
-					<Text style={styles.backText}>{back}</Text>
+		<View style={styles.cardContainer}>
+			<ScrollView
+				contentContainerStyle={styles.card}
+				horizontal
+				pagingEnabled
+				showsHorizontalScrollIndicator={false}
+				decelerationRate='fast'>
+				<View style={styles.cardContainer}>
+					<View style={[styles.front, { borderColor: borderColor }]}>
+						<Text style={styles.frontText}>{front}</Text>
+					</View>
+					<View style={[styles.back, { borderColor: borderColor }]}>
+						<View>
+							<Text style={styles.backText}>{back}</Text>
+						</View>
+					</View>
 				</View>
-			</View>
+				<View style={styles.delete}>
+					<Icon name='trash-2' color='#ffffff' size={26} />
+				</View>
+			</ScrollView>
 		</View>
 	);
 };
@@ -76,14 +91,28 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	card: {
-		flexDirection: 'row',
+	cardContainer: {
+		flex: 1,
 		alignItems: 'center',
-		paddingTop: 20,
-		paddingHorizontal: 20,
+		flexDirection: 'row',
+		paddingHorizontal: 10,
+	},
+	cardScroll: {
+		flexGrow: 1,
+	},
+	card: {
+		marginTop: 20,
+		flexGrow: 1,
+	},
+	delete: {
+		backgroundColor: '#ff5148',
+		marginHorizontal: 3,
+		justifyContent: 'center',
+		padding: 4,
+		borderRadius: 10,
 	},
 	front: {
-		width: '50%',
+		width: windowWidth / 2 - 20,
 		backgroundColor: '#d3d3d3',
 		alignItems: 'center',
 		padding: 10,
@@ -95,7 +124,7 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 	},
 	back: {
-		width: '50%',
+		width: windowWidth / 2 - 20,
 		alignItems: 'center',
 		padding: 10,
 		backgroundColor: '#67B7D1',
