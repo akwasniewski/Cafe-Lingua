@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
+import { languageGlobal } from '../App';
 const AddCards = ({ route, navigation }) => {
 	const { deckName } = route.params;
 	const [front, setFront] = React.useState('');
@@ -19,7 +20,13 @@ const AddCards = ({ route, navigation }) => {
 			setDoc(
 				doc(
 					db,
-					'users/' + userEmailGlobal + '/decks/' + deckName + '/cards',
+					'users/' +
+						userEmailGlobal +
+						'/languages/' +
+						languageGlobal +
+						'/decks/' +
+						deckName +
+						'/cards',
 					front
 				),
 				{
@@ -33,7 +40,15 @@ const AddCards = ({ route, navigation }) => {
 			alert(error.message);
 		}
 		await updateDoc(
-			doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),
+			doc(
+				db,
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName
+			),
 			{ cardCount: increment(1) }
 		);
 		setFront('');

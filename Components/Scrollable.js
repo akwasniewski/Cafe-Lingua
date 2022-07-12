@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
+import { languageGlobal } from '../App';
 import {
 	RefreshControl,
 	View,
@@ -59,7 +60,10 @@ const Scrollable = ({ navigation, route }, props) => {
 
 	useEffect(async () => {
 		const snap = await getDocs(
-			collection(db, 'users/' + userEmailGlobal + '/decks')
+			collection(
+				db,
+				'users/' + userEmailGlobal + '/languages/' + languageGlobal + '/decks'
+			)
 		);
 		const decks = [];
 		snap.forEach((doc) => {

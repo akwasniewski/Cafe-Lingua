@@ -4,17 +4,29 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { setDoc, doc, collection } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
+import { languageGlobal } from '../App';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 const AddDeck = ({ navigation }) => {
 	const [deckName, setDeckName] = React.useState('');
 	const AddDeckToDb = async (navigation) => {
 		try {
-			setDoc(doc(db, 'users/' + userEmailGlobal + '/decks', deckName), {
-				userEmail: userEmailGlobal,
-				deckName: deckName,
-				cardCount: 0,
-				mastery: 0,
-			});
+			setDoc(
+				doc(
+					db,
+					'users/' +
+						userEmailGlobal +
+						'/languages/' +
+						languageGlobal +
+						'/decks',
+					deckName
+				),
+				{
+					userEmail: userEmailGlobal,
+					deckName: deckName,
+					cardCount: 0,
+					mastery: 0,
+				}
+			);
 		} catch (error) {
 			alert(error.message);
 		}

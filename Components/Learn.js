@@ -11,6 +11,7 @@ import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import { updateDoc } from 'firebase/firestore';
 import LearnCard from './LearnCard';
+import { languageGlobal } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 const getRandomInt = (max) => {
 	return Math.floor(Math.random() * max);
@@ -24,7 +25,13 @@ const Learn = ({ route, navigation }) => {
 		const snap = await getDocs(
 			collection(
 				db,
-				'users/' + userEmailGlobal + '/decks/' + deckName + '/cards'
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName +
+					'/cards'
 			)
 		);
 		const cards = [];
@@ -99,6 +106,8 @@ const Learn = ({ route, navigation }) => {
 							db,
 							'users/' +
 								userEmailGlobal +
+								'/languages/' +
+								languageGlobal +
 								'/decks/' +
 								deckName +
 								'/cards/' +

@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { deleteDoc, updateDoc, increment } from 'firebase/firestore';
+import { languageGlobal } from '../App';
 const windowWidth = Dimensions.get('window').width;
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -23,13 +24,31 @@ const DeleteCard = (deckName, front) => {
 	deleteDoc(
 		doc(
 			db,
-			'users/' + userEmailGlobal + '/decks/' + deckName + '/cards/' + front
+			'users/' +
+				userEmailGlobal +
+				'/languages/' +
+				languageGlobal +
+				'/decks/' +
+				deckName +
+				'/cards/' +
+				front
 		)
 	);
 
-	updateDoc(doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName), {
-		cardCount: increment(-1),
-	});
+	updateDoc(
+		doc(
+			db,
+			'users/' +
+				userEmailGlobal +
+				'/languages/' +
+				languageGlobal +
+				'/decks/' +
+				deckName
+		),
+		{
+			cardCount: increment(-1),
+		}
+	);
 };
 const DeckOverview = ({ route, navigation }) => {
 	const { deckName, cardCount, mastery } = route.params;
@@ -95,7 +114,13 @@ const DeckOverview = ({ route, navigation }) => {
 		const snap = await getDocs(
 			collection(
 				db,
-				'users/' + userEmailGlobal + '/decks/' + deckName + '/cards'
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName +
+					'/cards'
 			)
 		);
 		const cards = [];
