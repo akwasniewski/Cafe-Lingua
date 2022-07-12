@@ -1,5 +1,11 @@
-import React from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import {
+	KeyboardAvoidingView,
+	StyleSheet,
+	Text,
+	View,
+	Alert,
+} from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
 	setDoc,
@@ -7,16 +13,43 @@ import {
 	collection,
 	updateDoc,
 	increment,
+	getDocs,
 } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import { languageGlobal } from '../App';
+var fronts = [];
 const AddCards = ({ route, navigation }) => {
 	const { deckName } = route.params;
 	const [front, setFront] = React.useState('');
 	const [back, setBack] = React.useState('');
+	useEffect(async () => {
+		console.log('useffected');
+		const snap = await getDocs(
+			collection(
+				db,
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName +
+					'/cards/'
+			)
+		);
+		snap.forEach((card) => {
+			const data = card.data();
+			fronts.push(data.front);
+		});
+	}, []);
 	const NextCard = async (navigation) => {
+		var dbFront = front;
 		try {
+			let duplicateCount = 1;
+			while (fronts.includes(dbFront)) {
+				dbFront = front.concat(duplicateCount);
+				duplicateCount++;
+			}
 			setDoc(
 				doc(
 					db,
@@ -27,7 +60,7 @@ const AddCards = ({ route, navigation }) => {
 						'/decks/' +
 						deckName +
 						'/cards',
-					front
+					dbFront
 				),
 				{
 					front: front,
@@ -51,8 +84,10 @@ const AddCards = ({ route, navigation }) => {
 			),
 			{ cardCount: increment(1) }
 		);
+		fronts.push(dbFront);
 		setFront('');
 		setBack('');
+		console.log(fronts);
 	};
 	return (
 		<KeyboardAvoidingView style={styles.container}>
