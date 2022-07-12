@@ -48,7 +48,7 @@ const Item = ({ deckName, cardCount, mastery, navigation }) => (
 	</TouchableOpacity>
 );
 
-const Scrollable = ({ navigation }) => {
+const Scrollable = ({ navigation, route }, props) => {
 	const [decks, setDecks] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [cardCount, setCardCount] = React.useState(0);
@@ -90,7 +90,13 @@ const Scrollable = ({ navigation }) => {
 		/>
 	);
 	const CallStats = () => {
-		return <Stats cardCount={cardCount} mastery={mastery} />;
+		return (
+			<Stats
+				cardCount={cardCount}
+				mastery={mastery}
+				language={props.language}
+			/>
+		);
 	};
 	return (
 		<View style={styles.container}>

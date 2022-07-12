@@ -11,6 +11,8 @@ import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from 'firebase/auth';
+import { db } from '../Database/firebase';
+import { setDoc, doc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../Database/firebase';
 const LoginScreen = (props) => {
@@ -35,6 +37,13 @@ const LoginScreen = (props) => {
 				SaveUser(user);
 			})
 			.catch((error) => alert(error.message));
+		try {
+			setDoc(doc(db, 'users/' + email), {
+				lastLanguage: '',
+			});
+		} catch (error) {
+			alert(error.message);
+		}
 	};
 	const HandleLogIn = () => {
 		console.log(email, password);

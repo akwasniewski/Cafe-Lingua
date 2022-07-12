@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { languageGlobal } from '../App';
 const Stats = (props) => {
 	return (
 		<View style={styles.container}>
@@ -13,7 +14,7 @@ const Stats = (props) => {
 			</View>
 			<View style={styles.column}>
 				<View style={styles.languageWrapper}>
-					<Text style={styles.language}>French</Text>
+					<Text style={styles.language}>{languageGlobal}</Text>
 				</View>
 				<Text style={styles.stat}>Cards: {props.cardCount}</Text>
 				<Text style={styles.stat}>Mastery: {props.mastery}% </Text>

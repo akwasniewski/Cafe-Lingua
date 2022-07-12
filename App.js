@@ -18,11 +18,16 @@ import LoginScreen from './Components/LoginScreen';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from './Database/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { db } from './Database/firebase';
+import { getDoc, doc } from 'firebase/firestore';
+import { stringify } from '@firebase/util';
+import AddLanguage from './Components/AddLanguage';
 var userEmailGlobal;
+var languageGlobal;
 export default function App({ navigation }) {
 	const [userEmail, setUserEmail] = React.useState('');
 	const [userPassword, setUserPassword] = React.useState('');
-	const [isTabVisible, setTabVisible] = React.useState('');
+	const [language, setLanguage] = React.useState('');
 	const GetUser = async () => {
 		try {
 			const savedUserEmail = await AsyncStorage.getItem('userEmail');
@@ -48,6 +53,18 @@ export default function App({ navigation }) {
 				.catch((error) => alert(error.messsage));
 		}
 	};
+	const FetchLanguage = async () => {
+		const user = await getDoc(doc(db, 'users', userEmail));
+		// pretier-ignore
+		{
+			if (user.exists()) {
+				if (user.data().lastLanguage != '') {
+					setLanguage(user.data().lastLanguage);
+					languageGlobal = user.data().lastLanguage;
+				}
+			}
+		}
+	};
 	useEffect(() => {
 		GetUser(); //checks whether user is stored on app launch
 	}, [AppState]);
@@ -68,10 +85,14 @@ export default function App({ navigation }) {
 		);
 	};
 	const LogIn = ({ navigation }) => {
-		useEffect(() => {
-			if (userEmail != '') navigation.navigate('LoggedIn');
+		useEffect(async () => {
+			if (userEmail != '') {
+				await FetchLanguage();
+				if (language != '')
+					navigation.navigate('LoggedIn', { language: language });
+				else navigation.navigate('AddLanguage');
+			}
 		}, [userEmail]);
-
 		return (
 			<LoginScreen
 				user={userEmail}
@@ -82,6 +103,8 @@ export default function App({ navigation }) {
 	const LoggedIn = ({ navigation }) => {
 		useEffect(() => {
 			if (userEmail == '') navigation.navigate('Login');
+			console.log('lol');
+			FetchLanguage();
 		}, [userEmail]);
 
 		return (
@@ -94,6 +117,7 @@ export default function App({ navigation }) {
 				<Tab.Screen
 					name='Home'
 					component={HomeScreen}
+					initialParams={{ language: language }}
 					options={{
 						tabBarLabel: 'Home',
 						tabBarIcon: ({ color }) => (
@@ -133,9 +157,10 @@ export default function App({ navigation }) {
 					initialRouteName='Login'>
 					<Stack.Screen name='Login' component={LogIn} />
 					<Stack.Screen name='LoggedIn' component={LoggedIn} />
+					<Stack.Screen name='AddLanguage' component={AddLanguage} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
 	);
 }
-export { userEmailGlobal };
+export { userEmailGlobal, languageGlobal };
