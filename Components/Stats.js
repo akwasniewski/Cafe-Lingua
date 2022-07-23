@@ -1,12 +1,31 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { languageGlobal } from '../App';
+import flags from '../assets/flags/getFlags';
+import { languageGlobal, userEmailGlobal } from '../App';
+import { db } from '../Database/firebase';
+import { getDoc, doc } from 'firebase/firestore';
 const Stats = (props) => {
+	const [bannerMode, setBannerMode] = React.useState(0);
+	const [flagId, setFlagId] = React.useState(0);
+	React.useEffect(async () => {
+		const language = await getDoc(
+			doc(db, 'users/' + userEmailGlobal + '/languages/', languageGlobal)
+		);
+		// pretier-ignore
+		{
+			setBannerMode(language.data().bannerMode);
+			setFlagId(language.data().flagId);
+		}
+	}, []);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.column}>
-				<Image style={styles.flag} source={require('../assets/french.png')} />
+				<View style={styles.bannerShadow}>
+					<Image style={styles.flag} source={flags[flagId].src} />
+				</View>
+
 				<TouchableOpacity style={styles.button}>
 					<Text style={styles.learn}>Learn all</Text>
 					<Icon name='play' size={40} color='white' />
@@ -33,6 +52,16 @@ const styles = StyleSheet.create({
 	column: {
 		flex: 1,
 		alignItems: 'center',
+	},
+	bannerShadow: {
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 4,
 	},
 	flag: {
 		height: 73,
