@@ -88,7 +88,15 @@ const Learn = ({ route, navigation }) => {
 		if (masteryChange != 0) {
 			console.log('kurwa');
 			await updateDoc(
-				doc(db, 'users/' + userEmailGlobal + '/decks/' + deckName),
+				doc(
+					db,
+					'users/' +
+						userEmailGlobal +
+						'/languages/' +
+						languageGlobal +
+						'/decks/' +
+						deckName
+				),
 				{ mastery: increment(masteryChange) }
 			);
 		}

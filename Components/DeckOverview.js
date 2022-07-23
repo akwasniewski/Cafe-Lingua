@@ -20,7 +20,7 @@ const windowWidth = Dimensions.get('window').width;
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-const DeleteCard = (deckName, front) => {
+const DeleteCard = (deckName, front, weight) => {
 	deleteDoc(
 		doc(
 			db,
@@ -47,6 +47,7 @@ const DeleteCard = (deckName, front) => {
 		),
 		{
 			cardCount: increment(-1),
+			mastery: increment(-(weight - 1)),
 		}
 	);
 };
@@ -96,7 +97,7 @@ const DeckOverview = ({ route, navigation }) => {
 					<TouchableOpacity
 						onPress={() => {
 							Refresh();
-							DeleteCard(deckName, front);
+							DeleteCard(deckName, front, weight);
 						}}
 						style={styles.delete}>
 						<Icon name='trash-2' color='#ffffff' size={26} />
