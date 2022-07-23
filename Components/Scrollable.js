@@ -54,11 +54,19 @@ const Scrollable = ({ navigation, route }, props) => {
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [cardCount, setCardCount] = React.useState(0);
 	const [mastery, setMastery] = React.useState(0);
+	const [bannerMode, setBannerMode] = React.useState(0);
+	const [flagId, setFlagId] = React.useState(0);
 	const Refresh = () => {
 		setRefreshing(true);
 	};
 
 	useEffect(async () => {
+		const language = await getDoc(
+			doc(db, 'users/' + userEmailGlobal + '/languages/', languageGlobal)
+		);
+		setBannerMode(language.data().bannerMode);
+		setFlagId(language.data().flagId);
+
 		const snap = await getDocs(
 			collection(
 				db,
@@ -96,6 +104,8 @@ const Scrollable = ({ navigation, route }, props) => {
 	const CallStats = () => {
 		return (
 			<Stats
+				flagId={flagId}
+				bannerMode={bannerMode}
 				cardCount={cardCount}
 				mastery={mastery}
 				language={props.language}
