@@ -6,22 +6,42 @@ import { languageGlobal, userEmailGlobal } from '../App';
 const Stats = (props) => {
 	return (
 		<View style={styles.container}>
-			<View style={styles.column}>
-				<View style={styles.bannerShadow}>
-					<Image style={styles.flag} source={flags[props.flagId].src} />
-				</View>
+			<View style={styles.columnContainer}>
+				<View style={styles.column}>
+					<View style={styles.bannerShadow}>
+						<Image style={styles.flag} source={flags[props.flagId].src} />
+					</View>
 
-				<TouchableOpacity style={styles.button}>
-					<Text style={styles.learn}>Learn all</Text>
-					<Icon name='play' size={40} color='white' />
-				</TouchableOpacity>
-			</View>
-			<View style={styles.column}>
-				<View style={styles.languageWrapper}>
-					<Text style={styles.language}>{languageGlobal}</Text>
+					<TouchableOpacity style={styles.button}>
+						<Text style={styles.learn}>Learn all</Text>
+						<Icon name='play' size={40} color='white' />
+					</TouchableOpacity>
 				</View>
-				<Text style={styles.stat}>Cards: {props.cardCount}</Text>
-				<Text style={styles.stat}>Mastery: {props.mastery}% </Text>
+				<View style={styles.column}>
+					<View style={styles.languageWrapper}>
+						<Text style={styles.language}>{languageGlobal}</Text>
+					</View>
+					<Text style={styles.stat}>Cards: {props.cardCount}</Text>
+					<Text style={styles.stat}>Mastery: {props.mastery}% </Text>
+				</View>
+			</View>
+			<View style={styles.util}>
+				{/*<TouchableOpacity
+						style={styles.editButton}
+						onPress={() => {
+							props.navigation.navigate('AddCards', {
+								deckName: props.deckName,
+							});
+						}}>
+						<Icon name='edit' color='#ffffff' size={26} />
+					</TouchableOpacity>*/}
+				<TouchableOpacity
+					style={styles.editButton}
+					onPress={() => {
+						props.navigation.navigate('AddDeck');
+					}}>
+					<Icon name='plus' color='#ffffff' size={26} />
+				</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -29,9 +49,11 @@ const Stats = (props) => {
 
 const styles = StyleSheet.create({
 	container: {
-		paddingTop: 40,
-		padding: 15,
 		backgroundColor: '#fff',
+		padding: 15,
+	},
+	columnContainer: {
+		paddingTop: 40,
 		flexDirection: 'row',
 	},
 	column: {
@@ -78,6 +100,18 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 		alignContent: 'center',
 		borderRadius: 10,
+	},
+	editButton: {
+		flexDirection: 'row',
+		padding: 10,
+		marginLeft: 5,
+		backgroundColor: '#3d475e',
+		marginTop: 15,
+		alignItems: 'center',
+		borderRadius: 10,
+	},
+	util: {
+		flexDirection: 'row-reverse',
 	},
 });
 export default Stats;

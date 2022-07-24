@@ -28,8 +28,7 @@ const DeckStats = (props, navigation) => {
 				</View>
 			</View>
 			<View style={styles.util}>
-				<View style={styles.buttons}>
-					{/*<TouchableOpacity
+				{/*<TouchableOpacity
 						style={styles.editButton}
 						onPress={() => {
 							props.navigation.navigate('AddCards', {
@@ -38,16 +37,15 @@ const DeckStats = (props, navigation) => {
 						}}>
 						<Icon name='edit' color='#ffffff' size={26} />
 					</TouchableOpacity>*/}
-					<TouchableOpacity
-						style={styles.editButton}
-						onPress={() => {
-							props.navigation.navigate('AddCards', {
-								deckName: props.deckName,
-							});
-						}}>
-						<Icon name='plus' color='#ffffff' size={26} />
-					</TouchableOpacity>
-				</View>
+				<TouchableOpacity
+					style={styles.editButton}
+					onPress={() => {
+						props.navigation.navigate('AddCards', {
+							deckName: props.deckName,
+						});
+					}}>
+					<Icon name='plus' color='#ffffff' size={26} />
+				</TouchableOpacity>
 			</View>
 		</View>
 	);
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		padding: 3,
 	},
-	buttons: {
+	util: {
 		flexDirection: 'row-reverse',
 	},
 	learnButton: {

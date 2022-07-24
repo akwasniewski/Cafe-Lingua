@@ -56,6 +56,16 @@ const Scrollable = ({ navigation, route }, props) => {
 	const [mastery, setMastery] = React.useState(0);
 	const [bannerMode, setBannerMode] = React.useState(0);
 	const [flagId, setFlagId] = React.useState(0);
+
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+					<Icon name='settings' size={30} color='white' />
+				</TouchableOpacity>
+			),
+		});
+	}, [navigation]);
 	const Refresh = () => {
 		setRefreshing(true);
 	};
@@ -109,6 +119,7 @@ const Scrollable = ({ navigation, route }, props) => {
 				cardCount={cardCount}
 				mastery={mastery}
 				language={props.language}
+				navigation={navigation}
 			/>
 		);
 	};

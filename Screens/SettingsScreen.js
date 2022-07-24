@@ -7,21 +7,13 @@ import LoginScreen from '../Components/LoginScreen';
 import LoggedScreen from '../Components/LoggedScreen';
 const SettingsScreen = (props) => {
 	const Logged = () => {
-		return (
-			<LoggedScreen
-				user={props.user}
-				setUserEmail={(newUser) => props.setUserEmail(newUser)}
-			/>
-		);
+		return <LoggedScreen />;
 	};
 	return (
 		<Stack.Navigator
 			initialRouteName='SettingsMain'
 			screenOptions={{
-				headerStyle: {
-					backgroundColor: '#3d475e',
-				},
-				headerTintColor: '#fff',
+				headerShown: false,
 			}}>
 			<Stack.Screen name='SettingsMain' component={Logged} />
 		</Stack.Navigator>

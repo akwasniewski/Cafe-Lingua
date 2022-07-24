@@ -10,10 +10,7 @@ const AddDeck = () => {
 		<Stack.Navigator
 			initialRouteName='AddDeck'
 			screenOptions={{
-				headerStyle: {
-					backgroundColor: '#3d475e',
-				},
-				headerTintColor: '#fff',
+				headerShown: false,
 			}}>
 			<Stack.Screen name='AddDeck' component={AddDeckMain} />
 			<Stack.Screen name='AddCards' component={AddCards} />

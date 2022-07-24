@@ -107,47 +107,7 @@ export default function App({ navigation }) {
 			FetchLanguage();
 		}, [userEmail]);
 
-		return (
-			<Tab.Navigator
-				barStyle={{
-					backgroundColor: '#3d475e',
-				}}
-				activeColor='#FF8DA1'
-				inactiveColor='white'>
-				<Tab.Screen
-					name='Home'
-					component={HomeScreen}
-					initialParams={{ language: language }}
-					options={{
-						tabBarLabel: 'Home',
-						tabBarIcon: ({ color }) => (
-							<Icon name='flag' color={color} size={26} />
-						),
-					}}
-				/>
-				<Tab.Screen
-					name='AddDeck'
-					component={AddDeck}
-					options={{
-						tabBarLabel: 'Add Deck',
-						tabBarIcon: ({ color }) => (
-							<Icon name='plus-circle' color={color} size={26} />
-						),
-						userEmail: { userEmail },
-					}}
-				/>
-				<Tab.Screen
-					name='Settings'
-					component={SettingsScreenCall}
-					options={{
-						tabBarLabel: 'Settings',
-						tabBarIcon: ({ color }) => (
-							<Icon name='settings' color={color} size={26} />
-						),
-					}}
-				/>
-			</Tab.Navigator>
-		);
+		return <HomeScreen />;
 	};
 	return (
 		<>

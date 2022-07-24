@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import {
+	SectionList,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import DeckOverview from '../Components/DeckOverview';
 const Stack = createNativeStackNavigator();
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Scrollable from '../Components/Scrollable';
 import Learn from '../Components/Learn';
 import AddCards from '../Components/AddCards';
+import AddDeck from './AddDeck';
+import SettingsScreen from './SettingsScreen';
+import Icon from 'react-native-vector-icons/Feather';
+import { languageGlobal } from '../App';
 const Home = ({ route, props }) => {
-	const language = route.params.language;
-	console.log('koccc' + language);
 	return (
 		<Stack.Navigator
 			initialRouteName='Language'
@@ -22,21 +30,34 @@ const Home = ({ route, props }) => {
 				<Stack.Screen
 					name='Language'
 					component={Scrollable}
-					initialParams={{ language: language }}
+					initialParams={{ language: languageGlobal }}
+					options={{
+						headerTitle: languageGlobal,
+					}}
 				/>
 				<Stack.Screen
 					name='DeckOverview'
 					component={DeckOverview}
-					language={language}
+					language={languageGlobal}
 				/>
 				<Stack.Screen
 					name='AddCards'
 					component={AddCards}
-					language={language}
+					language={languageGlobal}
 				/>
+				<Stack.Screen
+					name='AddDeck'
+					component={AddDeck}
+					language={languageGlobal}
+				/>
+				<Stack.Screen name='Settings' component={SettingsScreen} />
 			</Stack.Group>
 			<Stack.Group>
-				<Stack.Screen name='Learn' component={Learn} language={language} />
+				<Stack.Screen
+					name='Learn'
+					component={Learn}
+					language={languageGlobal}
+				/>
 			</Stack.Group>
 		</Stack.Navigator>
 	);
