@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserInfo } from 'firebase/auth';
 import { userEmailGlobal } from '../App';
-const LoggedScreen = () => {
+const LoggedScreen = (props) => {
 	const DeleteUser = async () => {
 		console.log('logging out');
 		try {
@@ -14,6 +14,8 @@ const LoggedScreen = () => {
 		} catch (error) {
 			alert(error.message);
 		}
+		props.setUserEmail('');
+		props.setLanguage('');
 	};
 	const HandleLogOut = () => {
 		signOut(auth)

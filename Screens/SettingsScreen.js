@@ -7,7 +7,12 @@ import LoginScreen from '../Components/LoginScreen';
 import LoggedScreen from '../Components/LoggedScreen';
 const SettingsScreen = (props) => {
 	const Logged = () => {
-		return <LoggedScreen />;
+		return (
+			<LoggedScreen
+				setLanguage={(newLanguage) => props.setLanguage(newLanguage)}
+				setUserEmail={(newEmail) => props.setUserEmail(newEmail)}
+			/>
+		);
 	};
 	return (
 		<Stack.Navigator

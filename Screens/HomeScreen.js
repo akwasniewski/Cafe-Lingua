@@ -17,7 +17,15 @@ import AddDeck from './AddDeck';
 import SettingsScreen from './SettingsScreen';
 import Icon from 'react-native-vector-icons/Feather';
 import { languageGlobal } from '../App';
-const Home = ({ route, props }) => {
+const Home = (props) => {
+	const CallSettings = () => {
+		return (
+			<SettingsScreen
+				setLanguage={(newLanguage) => props.setLanguage(newLanguage)}
+				setUserEmail={(newEmail) => props.setUserEmail(newEmail)}
+			/>
+		);
+	};
 	return (
 		<Stack.Navigator
 			initialRouteName='Language'
@@ -57,7 +65,7 @@ const Home = ({ route, props }) => {
 					component={AddDeck}
 					language={languageGlobal}
 				/>
-				<Stack.Screen name='Settings' component={SettingsScreen} />
+				<Stack.Screen name='Settings' component={CallSettings} />
 			</Stack.Group>
 			<Stack.Group>
 				<Stack.Screen

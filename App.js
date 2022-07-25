@@ -61,7 +61,6 @@ export default function App({ navigation }) {
 			if (user.exists()) {
 				if (user.data().lastLanguage != '') {
 					setLanguage(user.data().lastLanguage);
-					languageGlobal = user.data().lastLanguage;
 				}
 			}
 		}
@@ -73,6 +72,9 @@ export default function App({ navigation }) {
 		userEmailGlobal = userEmail;
 	}, [userEmail]);
 	useEffect(() => {
+		languageGlobal = language;
+	}, [language]);
+	useEffect(() => {
 		const user = auth.currentUser;
 		console.log('firebaseuser' + user);
 	}, [userEmail]);
@@ -80,6 +82,7 @@ export default function App({ navigation }) {
 	const LogIn = ({ navigation }) => {
 		useEffect(async () => {
 			if (userEmail != '') {
+				console.log('useremail' + userEmail);
 				await FetchLanguage();
 				if (language != '')
 					navigation.navigate('LoggedIn', { language: language });
@@ -100,8 +103,14 @@ export default function App({ navigation }) {
 			FetchLanguage();
 		}, [userEmail]);
 
-		return <HomeScreen />;
+		return (
+			<HomeScreen
+				setLanguage={(newLanguage) => setLanguage(newLanguage)}
+				setUserEmail={(newEmail) => setUserEmail(newEmail)}
+			/>
+		);
 	};
+
 	return (
 		<>
 			<NavigationContainer>
