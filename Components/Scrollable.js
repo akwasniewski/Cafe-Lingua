@@ -39,6 +39,7 @@ const Item = ({ deckName, cardCount, mastery, navigation }) => (
 					onPress={() => {
 						navigation.navigate('Learn', {
 							deckName: deckName,
+							backKey: 'Language',
 						});
 					}}>
 					<Text style={styles.learn}>Learn</Text>

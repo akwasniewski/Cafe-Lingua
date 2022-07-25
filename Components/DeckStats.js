@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import DeckOverview from './DeckOverview';
 const DeckStats = (props, navigation) => {
 	console.log('mast' + props.mastery);
 	console.log('cc' + props.cardCount);
@@ -16,6 +17,7 @@ const DeckStats = (props, navigation) => {
 						onPress={() => {
 							props.navigation.navigate('Learn', {
 								deckName: props.deckName,
+								backKey: 'DeckOverview',
 							});
 						}}>
 						<Text style={styles.learn}>Learn</Text>

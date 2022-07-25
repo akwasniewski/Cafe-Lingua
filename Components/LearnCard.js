@@ -95,7 +95,7 @@ export default LearnCard;
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',
-		marginTop: 50,
+		marginVertical: 75,
 		flex: 13,
 		alignItems: 'center',
 		justifyContent: 'center',

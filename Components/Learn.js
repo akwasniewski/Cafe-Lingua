@@ -13,13 +13,28 @@ import { updateDoc } from 'firebase/firestore';
 import LearnCard from './LearnCard';
 import { languageGlobal } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useIsFocused } from '@react-navigation/native';
 const getRandomInt = (max) => {
 	return Math.floor(Math.random() * max);
 };
+var cardsGlobal = [];
 const Learn = ({ route, navigation }) => {
 	const { deckName } = route.params;
+	const { backKey } = route.params;
 	const [cards, setCards] = React.useState();
 	const [curCard, setCurCard] = React.useState();
+	const isFocused = useIsFocused();
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerTitle: deckName,
+			headerLeft: () => (
+				<TouchableOpacity onPress={Save}>
+					<Text style={styles.saveButton}>Save</Text>
+				</TouchableOpacity>
+			),
+			gestureEnabled: false,
+		});
+	}, [navigation]);
 	React.useEffect(async () => {
 		//getting cards from the server
 		const snap = await getDocs(
@@ -34,22 +49,23 @@ const Learn = ({ route, navigation }) => {
 					'/cards'
 			)
 		);
-		const cards = [];
+		const newCards = [];
 		snap.forEach((doc) => {
 			const data = doc.data();
-			cards.push(data);
+			newCards.push(data);
 		});
-		cards.forEach((card) => {
+		newCards.forEach((card) => {
 			card.oldWeight = card.weight;
 		});
-		if (cards) {
-			setCards(cards);
+		if (newCards) {
+			setCards(newCards);
 		}
 	}, []);
 	React.useEffect(() => {
 		RandomCard();
 	}, [cards]);
 	const RandomCard = () => {
+		cardsGlobal = cards;
 		console.log('randomcard');
 		var randomCard;
 		var restrictedWeights = [];
@@ -80,88 +96,65 @@ const Learn = ({ route, navigation }) => {
 		}
 		if (randomCard) {
 			setCurCard(randomCard);
-			console;
-		}
-	};
-	const SaveMastery = async (masteryChange) => {
-		console.log('xdd');
-		if (masteryChange != 0) {
-			console.log('kurwa');
-			await updateDoc(
-				doc(
-					db,
-					'users/' +
-						userEmailGlobal +
-						'/languages/' +
-						languageGlobal +
-						'/decks/' +
-						deckName
-				),
-				{ mastery: increment(masteryChange) }
-			);
 		}
 	};
 	const Save = async () => {
-		if (!cards) {
+		if (!cardsGlobal) {
 			console.log('nocards');
-		} else {
-			var cardsProcessed = 0;
-			var masteryChange = 0;
-			cards.forEach(async (card) => {
-				if (card.weight != card.oldWeight) {
-					await updateDoc(
-						doc(
-							db,
-							'users/' +
-								userEmailGlobal +
-								'/languages/' +
-								languageGlobal +
-								'/decks/' +
-								deckName +
-								'/cards/' +
-								card.front
-						),
-						{ weight: card.weight }
-					);
-					if (card.oldWeight != 0)
-						masteryChange += card.weight - card.oldWeight;
-					else masteryChange += card.weight - 1;
-				}
-				cardsProcessed += 1;
-				if (cardsProcessed == cards.length) {
-					SaveMastery(masteryChange);
-				}
-				console.log(cardsProcessed);
-			});
+			return;
 		}
-	};
-	const ExitButton = () => {
-		return (
-			<View style={styles.buttonContainer}>
-				<TouchableOpacity
-					onPress={() => {
-						Save();
-						console.log('saved');
-						navigation.goBack();
-					}}
-					style={styles.button}>
-					<Text style={styles.exit}>Save</Text>
-				</TouchableOpacity>
-			</View>
-		);
+		var deckMastery = 0;
+		var cardsProcessed = 0;
+		cardsGlobal.forEach(async (card) => {
+			if (card.weight != card.oldWeight) {
+				console.log('savedCardMastery');
+				await updateDoc(
+					doc(
+						db,
+						'users/' +
+							userEmailGlobal +
+							'/languages/' +
+							languageGlobal +
+							'/decks/' +
+							deckName +
+							'/cards/' +
+							card.front
+					),
+					{ weight: card.weight }
+				);
+			}
+			deckMastery += card.weight - 1;
+			cardsProcessed += 1;
+			// not elegant indeed but works
+			// TODO: make it nice and async
+			if (cardsProcessed == cardsGlobal.length) {
+				await updateDoc(
+					doc(
+						db,
+						'users/' +
+							userEmailGlobal +
+							'/languages/' +
+							languageGlobal +
+							'/decks/' +
+							deckName
+					),
+					{ mastery: deckMastery }
+				);
+				console.log('deckmast' + deckMastery);
+				navigation.goBack();
+			}
+			console.log(cardsProcessed);
+		});
 	};
 	const Output = () => {
 		if (curCard) {
 			return (
-				<Modal presentationStyle='overFullScreen'>
-					<LearnCard
-						curCard={curCard}
-						cards={cards}
-						setCards={(newCards) => setCards(newCards)}
-						RandomCard={() => RandomCard()}
-					/>
-					<ExitButton />
-				</Modal>
+				<LearnCard
+					curCard={curCard}
+					cards={cards}
+					setCards={(newCards) => setCards(newCards)}
+					RandomCard={() => RandomCard()}
+				/>
 			);
 		} else {
 			return <Text>loading</Text>;
@@ -170,23 +163,9 @@ const Learn = ({ route, navigation }) => {
 	return <Output />;
 };
 const styles = StyleSheet.create({
-	buttonContainer: {
-		alignItems: 'center',
-		width: '100%',
-		flex: 1,
-		paddingBottom: 20,
-	},
-	button: {
-		width: '100%',
-		justifyContent: 'center',
-		backgroundColor: '#3d475e',
-		borderRadius: 10,
-	},
-	exit: {
-		color: 'white',
-		padding: 5,
-		fontSize: 30,
-		textAlign: 'center',
+	saveButton: {
+		color: '#ffffff',
+		fontSize: 20,
 	},
 });
 export default Learn;
