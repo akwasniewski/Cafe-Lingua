@@ -37,7 +37,7 @@ const Home = ({ route, props }) => {
 						headerLeft: () => (
 							<Image
 								style={styles.logo}
-								source={require('../assets/moka.png')}
+								source={require('../assets/moka2.png')}
 							/>
 						),
 					}}
@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
 		height: '70%',
 	},
 	logo: {
-		width: 100,
-		height: 100,
-		marginTop: -45,
-		marginLeft: -30,
+		width: 60,
+		height: 60,
+		marginTop: -10,
+		marginLeft: -15,
 	},
 });
 export default Home;
