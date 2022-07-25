@@ -5,6 +5,7 @@ import {
 	Text,
 	TouchableOpacity,
 	View,
+	Image,
 } from 'react-native';
 import DeckOverview from '../Components/DeckOverview';
 const Stack = createNativeStackNavigator();
@@ -33,6 +34,12 @@ const Home = ({ route, props }) => {
 					initialParams={{ language: languageGlobal }}
 					options={{
 						headerTitle: languageGlobal,
+						headerLeft: () => (
+							<Image
+								style={styles.logo}
+								source={require('../assets/moka.png')}
+							/>
+						),
 					}}
 				/>
 				<Stack.Screen
@@ -69,6 +76,12 @@ const styles = StyleSheet.create({
 	},
 	scroll: {
 		height: '70%',
+	},
+	logo: {
+		width: 100,
+		height: 100,
+		marginTop: -45,
+		marginLeft: -30,
 	},
 });
 export default Home;

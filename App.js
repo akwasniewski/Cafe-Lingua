@@ -22,6 +22,7 @@ import { db } from './Database/firebase';
 import { getDoc, doc } from 'firebase/firestore';
 import { stringify } from '@firebase/util';
 import AddLanguage from './Components/AddLanguage';
+import { StatusBar } from 'expo-status-bar';
 var userEmailGlobal;
 var languageGlobal;
 export default function App({ navigation }) {
@@ -76,14 +77,6 @@ export default function App({ navigation }) {
 		console.log('firebaseuser' + user);
 	}, [userEmail]);
 	console.log('user email: ' + userEmail);
-	const SettingsScreenCall = () => {
-		return (
-			<SettingsScreen
-				user={userEmail}
-				setUserEmail={(newUser) => setUserEmail(newUser)}
-			/>
-		);
-	};
 	const LogIn = ({ navigation }) => {
 		useEffect(async () => {
 			if (userEmail != '') {

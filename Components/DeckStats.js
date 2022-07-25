@@ -8,7 +8,6 @@ import {
 	Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import DeckOverview from './DeckOverview';
 const DeckStats = (props, navigation) => {
 	const mastery = Math.round(100 * (props.mastery / (props.cardCount * 2)));
 	return (
