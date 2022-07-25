@@ -80,10 +80,12 @@ const Scrollable = ({ navigation, route }, props) => {
 			),
 		});
 	}, [navigation]);
+	useEffect(() => {
+		Refresh();
+	}, []);
 	const Refresh = () => {
 		setRefreshing(true);
 	};
-
 	useEffect(async () => {
 		const language = await getDoc(
 			doc(db, 'users/' + userEmailGlobal + '/languages/', languageGlobal)

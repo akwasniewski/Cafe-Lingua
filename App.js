@@ -54,17 +54,6 @@ export default function App({ navigation }) {
 				.catch((error) => alert(error.messsage));
 		}
 	};
-	const FetchLanguage = async () => {
-		const user = await getDoc(doc(db, 'users', userEmail));
-		// pretier-ignore
-		{
-			if (user.exists()) {
-				if (user.data().lastLanguage != '') {
-					setLanguage(user.data().lastLanguage);
-				}
-			}
-		}
-	};
 	useEffect(() => {
 		GetUser(); //checks whether user is stored on app launch
 	}, [AppState]);
@@ -80,13 +69,22 @@ export default function App({ navigation }) {
 	}, [userEmail]);
 	console.log('user email: ' + userEmail);
 	const LogIn = ({ navigation }) => {
+		const CheckLanguage = () => {
+			getDoc(doc(db, 'users', userEmail)).then((user) => {
+				if (user.exists()) {
+					if (user.data().lastLanguage != '') {
+						setLanguage(user.data().lastLanguage);
+						return true;
+					} else return false;
+				} else return false;
+			});
+		};
 		useEffect(async () => {
 			if (userEmail != '') {
 				console.log('useremail' + userEmail);
-				await FetchLanguage();
-				if (language != '')
-					navigation.navigate('LoggedIn', { language: language });
-				else navigation.navigate('AddLanguage');
+
+				if (CheckLanguage()) navigation.navigate('AddLanguage');
+				else navigation.navigate('LoggedIn', { language: language });
 			}
 		}, [userEmail]);
 		return (
@@ -100,7 +98,6 @@ export default function App({ navigation }) {
 		useEffect(() => {
 			if (userEmail == '') navigation.navigate('Login');
 			console.log('lol');
-			FetchLanguage();
 		}, [userEmail]);
 
 		return (
