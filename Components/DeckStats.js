@@ -1,11 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	Image,
+	Text,
+	TouchableOpacity,
+	Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import DeckOverview from './DeckOverview';
 const DeckStats = (props, navigation) => {
-	console.log('mast' + props.mastery);
-	console.log('cc' + props.cardCount);
-
 	const mastery = Math.round(100 * (props.mastery / (props.cardCount * 2)));
 	return (
 		<View style={styles.container}>
@@ -15,10 +19,22 @@ const DeckStats = (props, navigation) => {
 					<TouchableOpacity
 						style={styles.learnButton}
 						onPress={() => {
-							props.navigation.navigate('Learn', {
-								deckName: props.deckName,
-								backKey: 'DeckOverview',
-							});
+							if (props.cardCount > 1) {
+								navigation.navigate('Learn', {
+									deckName: props.deckName,
+								});
+							} else {
+								Alert.alert(
+									'Not enough cards',
+									'Your deck has to have at least 2 cards to use learn functionality',
+									[
+										{
+											text: 'Ok',
+											style: 'cancel',
+										},
+									]
+								);
+							}
 						}}>
 						<Text style={styles.learn}>Learn</Text>
 						<Icon name='play' size={40} color='white' />

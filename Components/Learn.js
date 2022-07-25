@@ -101,7 +101,7 @@ const Learn = ({ route, navigation }) => {
 	const Save = async () => {
 		if (!cardsGlobal) {
 			console.log('nocards');
-			return;
+			navigation.goBack();
 		}
 		var deckMastery = 0;
 		var cardsProcessed = 0;

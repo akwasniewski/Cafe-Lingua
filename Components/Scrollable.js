@@ -12,6 +12,7 @@ import {
 	Text,
 	FlatList,
 	TouchableOpacity,
+	Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Stats from './Stats';
@@ -37,10 +38,22 @@ const Item = ({ deckName, cardCount, mastery, navigation }) => (
 				<TouchableOpacity
 					style={styles.learnButton}
 					onPress={() => {
-						navigation.navigate('Learn', {
-							deckName: deckName,
-							backKey: 'Language',
-						});
+						if (cardCount > 1) {
+							navigation.navigate('Learn', {
+								deckName: deckName,
+							});
+						} else {
+							Alert.alert(
+								'Not enough cards',
+								'Your deck has to have at least 2 cards to use learn functionality',
+								[
+									{
+										text: 'Ok',
+										style: 'cancel',
+									},
+								]
+							);
+						}
 					}}>
 					<Text style={styles.learn}>Learn</Text>
 					<Icon name='play' size={30} color='white' />
