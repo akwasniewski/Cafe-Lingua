@@ -78,9 +78,9 @@ const styles = StyleSheet.create({
 		height: '70%',
 	},
 	logo: {
-		width: 60,
-		height: 60,
-		marginTop: -10,
+		width: 50,
+		height: 50,
+		marginTop: -2,
 		marginLeft: -15,
 	},
 });
