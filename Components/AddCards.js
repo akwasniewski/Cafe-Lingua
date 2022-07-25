@@ -23,6 +23,11 @@ const AddCards = ({ route, navigation }) => {
 	const { deckName } = route.params;
 	const [front, setFront] = React.useState('');
 	const [back, setBack] = React.useState('');
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerTitle: 'Add to ' + deckName,
+		});
+	}, [navigation]);
 	useEffect(async () => {
 		console.log('useffected');
 		const snap = await getDocs(

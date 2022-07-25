@@ -13,7 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Scrollable from '../Components/Scrollable';
 import Learn from '../Components/Learn';
 import AddCards from '../Components/AddCards';
-import AddDeck from './AddDeck';
+import AddDeck from '../Components/AddDeck';
 import SettingsScreen from './SettingsScreen';
 import Icon from 'react-native-vector-icons/Feather';
 import { languageGlobal } from '../App';
@@ -64,6 +64,9 @@ const Home = (props) => {
 					name='AddDeck'
 					component={AddDeck}
 					language={languageGlobal}
+					options={{
+						headerTitle: 'Add Deck',
+					}}
 				/>
 				<Stack.Screen name='Settings' component={CallSettings} />
 			</Stack.Group>

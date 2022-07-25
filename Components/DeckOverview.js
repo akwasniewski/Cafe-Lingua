@@ -55,6 +55,11 @@ const DeckOverview = ({ route, navigation }) => {
 	const { deckName, cardCount, mastery } = route.params;
 	const [cards, setCards] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerTitle: deckName,
+		});
+	}, [navigation]);
 	const Card = ({ front, back, weight }) => {
 		var borderColor;
 		const [visible, setVisible] = React.useState(true);
