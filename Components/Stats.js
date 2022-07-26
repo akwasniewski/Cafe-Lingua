@@ -9,7 +9,9 @@ const Stats = (props) => {
 			<View style={styles.columnContainer}>
 				<View style={styles.column}>
 					<View style={styles.bannerShadow}>
-						<Image style={styles.flag} source={flags[props.flagId].src} />
+						<TouchableOpacity onPress={props.setLanguageSelectModal}>
+							<Image style={styles.flag} source={flags[props.flagId].src} />
+						</TouchableOpacity>
 					</View>
 
 					<TouchableOpacity style={styles.button}>

@@ -16,14 +16,32 @@ import AddCards from '../Components/AddCards';
 import AddDeck from '../Components/AddDeck';
 import SettingsScreen from './SettingsScreen';
 import Icon from 'react-native-vector-icons/Feather';
+import AddLanguage from '../Components/AddLanguage';
 import { languageGlobal } from '../App';
 const Home = (props) => {
+	const Scroll = ({ navigation }) => {
+		return (
+			<Scrollable
+				setLanguage={(newLanguage) => props.setLanguage(newLanguage)}
+				navigation={navigation}
+			/>
+		);
+	};
 	const CallSettings = () => {
 		return (
 			<SettingsScreen
 				setLanguage={(newLanguage) => props.setLanguage(newLanguage)}
 				setUserEmail={(newEmail) => props.setUserEmail(newEmail)}
 			/>
+		);
+	};
+	const AddLanguageMain = ({ navigation }) => {
+		const AddNewLanguage = (newLanguage) => {
+			navigation.navigate('Language');
+			props.setLanguage(newLanguage);
+		};
+		return (
+			<AddLanguage setLanguage={(newLanguage) => AddNewLanguage(newLanguage)} />
 		);
 	};
 	return (
@@ -38,8 +56,7 @@ const Home = (props) => {
 			<Stack.Group>
 				<Stack.Screen
 					name='Language'
-					component={Scrollable}
-					initialParams={{ language: languageGlobal }}
+					component={Scroll}
 					options={{
 						headerTitle: languageGlobal,
 						headerLeft: () => (
@@ -66,6 +83,13 @@ const Home = (props) => {
 					language={languageGlobal}
 					options={{
 						headerTitle: 'Add Deck',
+					}}
+				/>
+				<Stack.Screen
+					name='AddAnotherLanguage'
+					component={AddLanguageMain}
+					options={{
+						headerTitle: 'Add Another Language',
 					}}
 				/>
 				<Stack.Screen name='Settings' component={CallSettings} />
