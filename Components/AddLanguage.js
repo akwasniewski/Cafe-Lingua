@@ -14,17 +14,16 @@ import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import Icon from 'react-native-vector-icons/Feather';
 import flags from '../assets/flags/getFlags.js';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { concat } from 'react-native-reanimated';
 import { Banner } from 'react-native-paper';
-const AddLanguage = ({ navigation }) => {
+const AddLanguage = (props) => {
 	console.log(flags);
 	const [languageName, setLanguageName] = React.useState('');
 	const [modalVisible, setModalVisible] = React.useState('');
 	const [modalMode, setModalMode] = React.useState(0);
 	const [bannerHighlight, setBannerHighlight] = React.useState(0);
 	const [chosenFlagId, setChosenFlagId] = React.useState(0);
-	const AddLanguageToDb = async (navigation) => {
+	const AddLanguageToDb = async () => {
 		if (languageName != '' && bannerHighlight != 0) {
 			try {
 				setDoc(
@@ -45,9 +44,7 @@ const AddLanguage = ({ navigation }) => {
 			} catch (error) {
 				alert(error.message);
 			}
-			navigation.navigate('LoggedIn', {
-				language: languageName,
-			});
+			props.setLanguage(languageName);
 		}
 	};
 	const FlagChosen = (flagId) => {
@@ -158,7 +155,7 @@ const AddLanguage = ({ navigation }) => {
 					<Banner />
 				</TouchableOpacity>
 				<TouchableOpacity
-					onPress={() => AddLanguageToDb(navigation)}
+					onPress={() => AddLanguageToDb()}
 					style={styles.login}>
 					<Text style={styles.buttonText}>Create Language</Text>
 				</TouchableOpacity>

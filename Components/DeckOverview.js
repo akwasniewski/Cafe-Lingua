@@ -52,7 +52,9 @@ const DeleteCard = (deckName, front, weight, cardId) => {
 	);
 };
 const DeckOverview = ({ route, navigation }) => {
-	const { deckName, cardCount, mastery } = route.params;
+	const { deckName } = route.params;
+	const [mastery, setMastery] = React.useState(0);
+	const [cardCount, setCardCount] = React.useState(1);
 	const [cards, setCards] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
 	React.useLayoutEffect(() => {
@@ -136,6 +138,18 @@ const DeckOverview = ({ route, navigation }) => {
 			cards.push(data);
 		});
 		if (cards) setCards(cards);
+		getDoc(
+			doc(
+				db,
+				'users/' + userEmailGlobal + '/languages/' + languageGlobal + '/decks/',
+				deckName
+			)
+		).then((deck) => {
+			if (deck) {
+				setCardCount(deck.data().cardCount);
+				setMastery(deck.data().mastery);
+			}
+		});
 	};
 	React.useEffect(() => {
 		Fetch();

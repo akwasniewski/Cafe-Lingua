@@ -19,7 +19,7 @@ const DeckStats = (props, navigation) => {
 						style={styles.learnButton}
 						onPress={() => {
 							if (props.cardCount > 1) {
-								navigation.navigate('Learn', {
+								props.navigation.navigate('Learn', {
 									deckName: props.deckName,
 								});
 							} else {

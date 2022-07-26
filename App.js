@@ -66,24 +66,26 @@ export default function App({ navigation }) {
 	}, [userEmail]);
 	console.log('user email: ' + userEmail);
 	const LogIn = ({ navigation }) => {
-		const CheckLanguage = () => {
-			getDoc(doc(db, 'users', userEmail)).then((user) => {
-				if (user.exists()) {
-					if (user.data().lastLanguage != '') {
+		const FetchLanguage = new Promise((resolve, reject) => {
+			if (userEmail) {
+				getDoc(doc(db, 'users', userEmail)).then((user) => {
+					if (user.exists()) {
 						setLanguage(user.data().lastLanguage);
-						return true;
-					} else return false;
-				} else return false;
-			});
-		};
+						resolve(user.data().lastLanguage);
+					} else resolve('');
+				});
+			}
+		});
 		useEffect(async () => {
 			if (userEmail != '') {
 				console.log('useremail' + userEmail);
-
-				if (CheckLanguage()) navigation.navigate('AddLanguage');
-				else navigation.navigate('LoggedIn', { language: language });
+				FetchLanguage.then((fetchedLanguage) => {
+					console.log('fetchedlanguage' + fetchedLanguage);
+					if (fetchedLanguage == '') navigation.navigate('AddLanguage');
+					else navigation.navigate('LoggedIn', { language: fetchedLanguage });
+				});
 			}
-		}, [userEmail]);
+		}, [userEmail, language]);
 		return (
 			<LoginScreen
 				user={userEmail}
@@ -104,7 +106,11 @@ export default function App({ navigation }) {
 			/>
 		);
 	};
-
+	const AddLanguageMain = () => {
+		return (
+			<AddLanguage setLanguage={(newLanguage) => setLanguage(newLanguage)} />
+		);
+	};
 	return (
 		<>
 			<NavigationContainer>
@@ -113,7 +119,7 @@ export default function App({ navigation }) {
 					initialRouteName='Login'>
 					<Stack.Screen name='Login' component={LogIn} />
 					<Stack.Screen name='LoggedIn' component={LoggedIn} />
-					<Stack.Screen name='AddLanguage' component={AddLanguage} />
+					<Stack.Screen name='AddLanguage' component={AddLanguageMain} />
 				</Stack.Navigator>
 			</NavigationContainer>
 		</>
