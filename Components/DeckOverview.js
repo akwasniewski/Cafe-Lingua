@@ -20,7 +20,8 @@ const windowWidth = Dimensions.get('window').width;
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-const DeleteCard = (deckName, front, weight) => {
+const DeleteCard = (deckName, front, weight, cardId) => {
+	console.log('id' + cardId);
 	deleteDoc(
 		doc(
 			db,
@@ -31,7 +32,7 @@ const DeleteCard = (deckName, front, weight) => {
 				'/decks/' +
 				deckName +
 				'/cards/' +
-				front
+				cardId
 		)
 	);
 
@@ -47,7 +48,6 @@ const DeleteCard = (deckName, front, weight) => {
 		),
 		{
 			cardCount: increment(-1),
-			mastery: increment(-(weight - 1)),
 		}
 	);
 };
@@ -60,7 +60,7 @@ const DeckOverview = ({ route, navigation }) => {
 			headerTitle: deckName,
 		});
 	}, [navigation]);
-	const Card = ({ front, back, weight }) => {
+	const Card = ({ front, back, weight, cardId }) => {
 		var borderColor;
 		const [visible, setVisible] = React.useState(true);
 		switch (weight) {
@@ -102,7 +102,7 @@ const DeckOverview = ({ route, navigation }) => {
 					<TouchableOpacity
 						onPress={() => {
 							Refresh();
-							DeleteCard(deckName, front, weight);
+							DeleteCard(deckName, front, weight, cardId);
 						}}
 						style={styles.delete}>
 						<Icon name='trash-2' color='#ffffff' size={26} />
@@ -132,6 +132,7 @@ const DeckOverview = ({ route, navigation }) => {
 		const cards = [];
 		snap.forEach((doc) => {
 			const data = doc.data();
+			data.id = doc.id;
 			cards.push(data);
 		});
 		if (cards) setCards(cards);
@@ -140,7 +141,12 @@ const DeckOverview = ({ route, navigation }) => {
 		Fetch();
 	}, []);
 	const renderItem = ({ item }) => (
-		<Card front={item.front} back={item.back} weight={item.weight} />
+		<Card
+			front={item.front}
+			back={item.back}
+			weight={item.weight}
+			cardId={item.id}
+		/>
 	);
 	return (
 		<View style={styles.container}>
