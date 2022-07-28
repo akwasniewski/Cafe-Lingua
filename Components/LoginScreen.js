@@ -55,7 +55,10 @@ const LoginScreen = (props) => {
 			.catch((error) => alert(error.message));
 	};
 	return (
-		<KeyboardAvoidingView style={styles.container}>
+		<KeyboardAvoidingView
+			behavior='padding'
+			keyboardVerticalOffset={-100}
+			style={styles.container}>
 			<View>
 				<Image
 					style={styles.logo}
