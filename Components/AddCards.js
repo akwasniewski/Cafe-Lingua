@@ -6,6 +6,7 @@ import {
 	View,
 	Alert,
 	Image,
+	Keyboard,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
@@ -119,7 +120,7 @@ const AddCards = (props) => {
 				</View>
 			</TouchableOpacity>
 
-			<View style={styles.inputsContainer}>
+			<KeyboardAvoidingView style={styles.inputsContainer}>
 				<View style={styles.translationContainer}>
 					<TextInput
 						placeholder='Translation'
@@ -128,7 +129,13 @@ const AddCards = (props) => {
 							setFront(newFront);
 						}}
 						style={styles.input}
-						multiline='true'
+						multiline={true}
+						onKeyPress={(e) => {
+							if (e.nativeEvent.key === 'Enter') {
+								e.preventDefault();
+								Keyboard.dismiss();
+							}
+						}}
 					/>
 				</View>
 				<View style={styles.wordContainer}>
@@ -140,7 +147,13 @@ const AddCards = (props) => {
 							setBack(newBack);
 						}}
 						style={styles.input}
-						multiline='true'
+						multiline={true}
+						onKeyPress={(e) => {
+							if (e.nativeEvent.key === 'Enter') {
+								e.preventDefault();
+								Keyboard.dismiss();
+							}
+						}}
 					/>
 				</View>
 				<TouchableOpacity
@@ -148,7 +161,7 @@ const AddCards = (props) => {
 					style={styles.next}>
 					<Text style={styles.buttonText}>Add Card</Text>
 				</TouchableOpacity>
-			</View>
+			</KeyboardAvoidingView>
 		</KeyboardAvoidingView>
 	);
 };
