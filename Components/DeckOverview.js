@@ -6,6 +6,8 @@ import {
 	FlatList,
 	ScrollView,
 	RefreshControl,
+	Alert,
+	Modal,
 } from 'react-native';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../Database/firebase';
@@ -20,9 +22,12 @@ const windowWidth = Dimensions.get('window').width;
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-const DeckOverview = ({ route, navigation }) => {
+const DeckOverview = (props) => {
+	const navigation = props.navigation;
+	const route = props.route;
 	const { deckName } = route.params;
 	const [mastery, setMastery] = React.useState(0);
+	const [moreModal, setMoreModal] = React.useState(false);
 	const [cardCount, setCardCount] = React.useState(1);
 	const [cards, setCards] = React.useState();
 	const [refreshing, setRefreshing] = React.useState(false);
@@ -71,6 +76,7 @@ const DeckOverview = ({ route, navigation }) => {
 		setCardCount(cardCount - 1);
 		setMastery(mastery - masteryChange);
 	};
+
 	const Card = ({ front, back, weight, cardId }) => {
 		var borderColor;
 		const [visible, setVisible] = React.useState(true);
@@ -170,8 +176,110 @@ const DeckOverview = ({ route, navigation }) => {
 			cardId={item.id}
 		/>
 	);
+	const ResetMastery = () => {
+		var newCards = [];
+		cards.forEach(async (card) => {
+			await updateDoc(
+				doc(
+					db,
+					'users/' +
+						userEmailGlobal +
+						'/languages/' +
+						languageGlobal +
+						'/decks/' +
+						deckName +
+						'/cards/' +
+						card.id
+				),
+				{
+					weight: 0,
+				}
+			);
+			card.weight = 0;
+			newCards.push(card);
+		});
+		setCards(newCards);
+		setMastery(0);
+		setMoreModal(false);
+	};
+	const DeleteDeck = async () => {
+		props.DeckDeleted(deckName, cardCount, mastery);
+		await cards.forEach(async (card) => {
+			await deleteDoc(
+				doc(
+					db,
+					'users/' +
+						userEmailGlobal +
+						'/languages/' +
+						languageGlobal +
+						'/decks/' +
+						deckName +
+						'/cards/' +
+						card.id
+				)
+			);
+		});
+		await deleteDoc(
+			doc(
+				db,
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName
+			)
+		);
+		navigation.navigate('Language');
+	};
+	const AlertConfirm = (Action) => {
+		Alert.alert('Are you sure?', 'This operation cannot be undone', [
+			{
+				text: 'Cancel',
+				style: 'cancel',
+			},
+			{ text: "I'm sure", onPress: (val) => Action(val) },
+		]);
+	};
+	const More = () => {
+		return (
+			<View>
+				<View style={styles.modalUtil}>
+					{/*currently it is juest invisible x for better spacing, fix it */}
+					<TouchableOpacity onPress={() => setMoreModal(false)}>
+						<Icon name='x-circle' size={30} color='#FF8DA1' />
+					</TouchableOpacity>
+					<Text>More Deck Options</Text>
+					<Icon name='x-circle' size={30} color='white' />
+				</View>
+				<TouchableOpacity onPress={() => AlertConfirm(() => ResetMastery())}>
+					<View style={styles.moreOption}>
+						<Text style={styles.optionText}>Reset Mastery</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={() => AlertConfirm(() => DeleteDeck())}>
+					<View style={styles.deleteOption}>
+						<Text style={styles.optionText}>Delete Deck</Text>
+					</View>
+				</TouchableOpacity>
+			</View>
+		);
+	};
 	return (
 		<View style={styles.container}>
+			<Modal
+				animationType='fade'
+				transparent={true}
+				visible={moreModal}
+				onRequestClose={() => {
+					setMoreModal(!moreModal);
+				}}>
+				<View style={styles.modalContainer}>
+					<View style={styles.modalView}>
+						<More />
+					</View>
+				</View>
+			</Modal>
 			<FlatList
 				ListHeaderComponent={
 					<DeckStats
@@ -179,6 +287,7 @@ const DeckOverview = ({ route, navigation }) => {
 						cardCount={cardCount}
 						mastery={mastery}
 						navigation={navigation}
+						setMoreModal={() => setMoreModal(true)}
 					/>
 				}
 				data={cards}
@@ -196,6 +305,52 @@ export default DeckOverview;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+	},
+	modalContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	modalView: {
+		width: '90%',
+		margin: 20,
+		backgroundColor: 'white',
+		borderRadius: 20,
+		padding: 10,
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	modalUtil: {
+		borderBottomWidth: 3,
+		paddingBottom: 5,
+		borderBottomColor: '#f2f2f2',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	moreOption: {
+		backgroundColor: '#3d475e',
+		padding: 20,
+		marginVertical: 8,
+		marginHorizontal: 16,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		borderRadius: 10,
+	},
+	deleteOption: {
+		backgroundColor: '#ff5148',
+		padding: 20,
+		marginVertical: 8,
+		marginHorizontal: 16,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		borderRadius: 10,
 	},
 	cardContainer: {
 		flex: 1,
@@ -242,5 +397,9 @@ const styles = StyleSheet.create({
 	backText: {
 		color: 'white',
 		fontSize: 15,
+	},
+	optionText: {
+		color: 'white',
+		fontSize: 25,
 	},
 });

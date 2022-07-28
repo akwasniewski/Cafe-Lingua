@@ -45,15 +45,13 @@ const DeckStats = (props, navigation) => {
 				</View>
 			</View>
 			<View style={styles.util}>
-				{/*<TouchableOpacity
-						style={styles.editButton}
-						onPress={() => {
-							props.navigation.navigate('AddCards', {
-								deckName: props.deckName,
-							});
-						}}>
-						<Icon name='edit' color='#ffffff' size={26} />
-					</TouchableOpacity>*/}
+				<TouchableOpacity
+					style={styles.editButton}
+					onPress={() => {
+						props.setMoreModal();
+					}}>
+					<Icon name='more-horizontal' color='#ffffff' size={26} />
+				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.editButton}
 					onPress={() => {

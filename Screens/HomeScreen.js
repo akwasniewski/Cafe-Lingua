@@ -58,6 +58,7 @@ const Home = (props) => {
 		const decks = [];
 		snap.forEach((doc) => {
 			const data = doc.data();
+			data.id = doc.id;
 			decks.push(data);
 		});
 		if (decks) {
@@ -84,7 +85,13 @@ const Home = (props) => {
 		});
 		if (languages) setLangs(languages);
 	};
-
+	const DeckDeleted = (deckName, deckCardCount, deckMastery) => {
+		var newDecks = [];
+		decks.forEach((deck) => {
+			if (deck.id != deckName) newDecks.push(deck);
+		});
+		setDecks(newDecks);
+	};
 	const Scroll = ({ navigation }) => {
 		return (
 			<Scrollable
@@ -111,6 +118,15 @@ const Home = (props) => {
 	};
 	const CallAddCards = ({ navigation, route }) => {
 		return <AddCards flagId={flagId} navigation={navigation} route={route} />;
+	};
+	const CallDeckOverview = ({ navigation, route }) => {
+		return (
+			<DeckOverview
+				route={route}
+				navigation={navigation}
+				DeckDeleted={(deckName) => DeckDeleted(deckName)}
+			/>
+		);
 	};
 	const AddLanguageMain = ({ navigation }) => {
 		const AddNewLanguage = (newLanguage) => {
@@ -146,7 +162,7 @@ const Home = (props) => {
 				/>
 				<Stack.Screen
 					name='DeckOverview'
-					component={DeckOverview}
+					component={CallDeckOverview}
 					language={languageGlobal}
 				/>
 				<Stack.Screen

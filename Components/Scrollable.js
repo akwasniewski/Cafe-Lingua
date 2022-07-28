@@ -196,11 +196,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	modalContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	langList: {
 		maxHeight: 400,
 	},
@@ -236,6 +231,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 10,
 	},
+	modalContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	modalView: {
 		width: '90%',
 		margin: 20,
@@ -250,6 +250,14 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.25,
 		shadowRadius: 4,
 		elevation: 5,
+	},
+	modalUtil: {
+		borderBottomWidth: 3,
+		paddingBottom: 5,
+		borderBottomColor: '#f2f2f2',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 	},
 	learn: {
 		color: 'white',
@@ -277,14 +285,6 @@ const styles = StyleSheet.create({
 		padding: 10,
 		alignItems: 'center',
 		width: '50%',
-	},
-	modalUtil: {
-		borderBottomWidth: 3,
-		paddingBottom: 5,
-		borderBottomColor: '#f2f2f2',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
 	},
 });
 
