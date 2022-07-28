@@ -109,6 +109,9 @@ const Home = (props) => {
 			/>
 		);
 	};
+	const CallAddCards = ({ navigation, route }) => {
+		return <AddCards flagId={flagId} navigation={navigation} route={route} />;
+	};
 	const AddLanguageMain = ({ navigation }) => {
 		const AddNewLanguage = (newLanguage) => {
 			navigation.navigate('Language');
@@ -148,7 +151,7 @@ const Home = (props) => {
 				/>
 				<Stack.Screen
 					name='AddCards'
-					component={AddCards}
+					component={CallAddCards}
 					language={languageGlobal}
 				/>
 				<Stack.Screen

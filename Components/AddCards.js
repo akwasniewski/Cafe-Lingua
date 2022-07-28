@@ -5,6 +5,7 @@ import {
 	Text,
 	View,
 	Alert,
+	Image,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
@@ -15,11 +16,16 @@ import {
 	increment,
 	getDocs,
 } from 'firebase/firestore';
+import flags from '../assets/flags/getFlags';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
 import { languageGlobal } from '../App';
+import Icon from 'react-native-vector-icons/Feather';
+import { set } from 'react-native-reanimated';
 var fronts = [];
-const AddCards = ({ route, navigation }) => {
+const AddCards = (props) => {
+	const route = props.route;
+	const navigation = props.navigation;
 	const { deckName } = route.params;
 	const [front, setFront] = React.useState('');
 	const [back, setBack] = React.useState('');
@@ -47,6 +53,11 @@ const AddCards = ({ route, navigation }) => {
 			fronts.push(data.front);
 		});
 	}, []);
+	const Swap = () => {
+		let temp = front;
+		setFront(back);
+		setBack(temp);
+	};
 	const NextCard = async (navigation) => {
 		var dbFront = front;
 		try {
@@ -96,27 +107,46 @@ const AddCards = ({ route, navigation }) => {
 	};
 	return (
 		<KeyboardAvoidingView style={styles.container}>
-			<View style={styles.inputContainer}>
-				<TextInput
-					placeholder='Original'
-					value={front}
-					onChangeText={(newFront) => {
-						setFront(newFront);
-					}}
-					style={styles.input}
-				/>
-				<TextInput
-					placeholder='Translated'
-					value={back}
-					onChangeText={(newBack) => {
-						setBack(newBack);
-					}}
-					style={styles.input}
-				/>
+			<TouchableOpacity onPress={Swap}>
+				<View style={styles.arrows}>
+					<Icon name='arrow-up' size={30} color='#3d475e' />
+					<Icon
+						style={styles.rightArrow}
+						name='arrow-down'
+						size={30}
+						color='#FF8DA1'
+					/>
+				</View>
+			</TouchableOpacity>
+
+			<View style={styles.inputsContainer}>
+				<View style={styles.translationContainer}>
+					<TextInput
+						placeholder='Translation'
+						value={front}
+						onChangeText={(newFront) => {
+							setFront(newFront);
+						}}
+						style={styles.input}
+						multiline='true'
+					/>
+				</View>
+				<View style={styles.wordContainer}>
+					<Image style={styles.flag} source={flags[props.flagId].src} />
+					<TextInput
+						placeholder='Word'
+						value={back}
+						onChangeText={(newBack) => {
+							setBack(newBack);
+						}}
+						style={styles.input}
+						multiline='true'
+					/>
+				</View>
 				<TouchableOpacity
 					onPress={() => NextCard(navigation)}
 					style={styles.next}>
-					<Text style={styles.buttonText}>Next Card</Text>
+					<Text style={styles.buttonText}>Add Card</Text>
 				</TouchableOpacity>
 			</View>
 		</KeyboardAvoidingView>
@@ -128,18 +158,50 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	inputContainer: {
+	inputsContainer: {
 		width: '80%',
 	},
 	SaveContainer: {
 		justifyContent: 'flex-end',
 		flexDirection: 'row',
 	},
-	input: {
+	arrows: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		width: '90%',
+	},
+	rightArrow: {
+		marginLeft: -18,
+		marginTop: 2,
+	},
+	wordContainer: {
 		backgroundColor: '#fff',
 		padding: 10,
 		marginVertical: 3,
 		borderRadius: 5,
+		height: '40%',
+		textAlign: 'center',
+		justifyContent: 'center',
+		fontSize: 20,
+	},
+	flag: {
+		height: 30,
+		width: 45,
+		position: 'absolute',
+		top: 10,
+		left: 10,
+	},
+	translationContainer: {
+		backgroundColor: '#fff',
+		padding: 10,
+		marginVertical: 3,
+		borderRadius: 5,
+		height: '40%',
+		justifyContent: 'center',
+	},
+	input: {
+		textAlign: 'center',
+		fontSize: 20,
 	},
 	next: {
 		backgroundColor: '#FF8DA1',
