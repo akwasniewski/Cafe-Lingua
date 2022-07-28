@@ -8,6 +8,7 @@ import {
 	Image,
 	Keyboard,
 } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import {
 	setDoc,
@@ -25,6 +26,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { set } from 'react-native-reanimated';
 var fronts = [];
 const AddCards = (props) => {
+	const headerHeight = useHeaderHeight();
 	const route = props.route;
 	const navigation = props.navigation;
 	const { deckName } = route.params;
@@ -107,7 +109,10 @@ const AddCards = (props) => {
 		console.log(fronts);
 	};
 	return (
-		<KeyboardAvoidingView style={styles.container}>
+		<KeyboardAvoidingView
+			keyboardVerticalOffset={headerHeight}
+			behavior='padding'
+			style={styles.container}>
 			<TouchableOpacity onPress={Swap}>
 				<View style={styles.arrows}>
 					<Icon name='arrow-up' size={30} color='#3d475e' />
@@ -120,7 +125,7 @@ const AddCards = (props) => {
 				</View>
 			</TouchableOpacity>
 
-			<KeyboardAvoidingView style={styles.inputsContainer}>
+			<View style={styles.inputsContainer}>
 				<View style={styles.translationContainer}>
 					<TextInput
 						placeholder='Translation'
@@ -161,7 +166,7 @@ const AddCards = (props) => {
 					style={styles.next}>
 					<Text style={styles.buttonText}>Add Card</Text>
 				</TouchableOpacity>
-			</KeyboardAvoidingView>
+			</View>
 		</KeyboardAvoidingView>
 	);
 };
