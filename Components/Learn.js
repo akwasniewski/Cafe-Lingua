@@ -52,6 +52,7 @@ const Learn = ({ route, navigation }) => {
 		const newCards = [];
 		snap.forEach((doc) => {
 			const data = doc.data();
+			data.id = doc.id;
 			newCards.push(data);
 		});
 		newCards.forEach((card) => {
@@ -118,7 +119,7 @@ const Learn = ({ route, navigation }) => {
 							'/decks/' +
 							deckName +
 							'/cards/' +
-							card.front
+							card.id
 					),
 					{ weight: card.weight }
 				);
