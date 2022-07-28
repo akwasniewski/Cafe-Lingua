@@ -20,37 +20,6 @@ const windowWidth = Dimensions.get('window').width;
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-const DeleteCard = (deckName, front, weight, cardId) => {
-	console.log('id' + cardId);
-	deleteDoc(
-		doc(
-			db,
-			'users/' +
-				userEmailGlobal +
-				'/languages/' +
-				languageGlobal +
-				'/decks/' +
-				deckName +
-				'/cards/' +
-				cardId
-		)
-	);
-
-	updateDoc(
-		doc(
-			db,
-			'users/' +
-				userEmailGlobal +
-				'/languages/' +
-				languageGlobal +
-				'/decks/' +
-				deckName
-		),
-		{
-			cardCount: increment(-1),
-		}
-	);
-};
 const DeckOverview = ({ route, navigation }) => {
 	const { deckName } = route.params;
 	const [mastery, setMastery] = React.useState(0);
@@ -62,6 +31,46 @@ const DeckOverview = ({ route, navigation }) => {
 			headerTitle: deckName,
 		});
 	}, [navigation]);
+	const DeleteCard = async (front, weight, cardId) => {
+		console.log('id' + cardId);
+		var newCards = [];
+		await cards.forEach((card) => {
+			if (card.id != cardId) newCards.push(card);
+		});
+		setCards(newCards);
+		await deleteDoc(
+			doc(
+				db,
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName +
+					'/cards/' +
+					cardId
+			)
+		);
+		var masteryChange = 0;
+		if (weight != 0) masteryChange = weight - 1;
+		await updateDoc(
+			doc(
+				db,
+				'users/' +
+					userEmailGlobal +
+					'/languages/' +
+					languageGlobal +
+					'/decks/' +
+					deckName
+			),
+			{
+				cardCount: increment(-1),
+				mastery: masteryChange,
+			}
+		);
+		setCardCount(cardCount - 1);
+		setMastery(mastery - masteryChange);
+	};
 	const Card = ({ front, back, weight, cardId }) => {
 		var borderColor;
 		const [visible, setVisible] = React.useState(true);
@@ -103,8 +112,7 @@ const DeckOverview = ({ route, navigation }) => {
 					</View>
 					<TouchableOpacity
 						onPress={() => {
-							Refresh();
-							DeleteCard(deckName, front, weight, cardId);
+							DeleteCard(front, weight, cardId, weight);
 						}}
 						style={styles.delete}>
 						<Icon name='trash-2' color='#ffffff' size={26} />
