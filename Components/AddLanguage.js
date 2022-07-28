@@ -7,16 +7,19 @@ import {
 	Modal,
 	Image,
 	FlatList,
+	Alert,
 } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { setDoc, doc, collection, updateDoc } from 'firebase/firestore';
 import { db } from '../Database/firebase';
 import { userEmailGlobal } from '../App';
+import { useHeaderHeight } from '@react-navigation/elements';
 import Icon from 'react-native-vector-icons/Feather';
 import flags from '../assets/flags/getFlags.js';
 import { concat } from 'react-native-reanimated';
 import { Banner } from 'react-native-paper';
 const AddLanguage = (props) => {
+	const headerHeight = useHeaderHeight();
 	console.log(flags);
 	const [languageName, setLanguageName] = React.useState('');
 	const [modalVisible, setModalVisible] = React.useState('');
@@ -45,6 +48,17 @@ const AddLanguage = (props) => {
 				alert(error.message);
 			}
 			props.setLanguage(languageName);
+		} else {
+			Alert.alert(
+				"Can't add Language",
+				'You need to name the language and change the banner first',
+				[
+					{
+						text: 'Ok',
+						style: 'cancel',
+					},
+				]
+			);
 		}
 	};
 	const FlagChosen = (flagId) => {
@@ -55,18 +69,17 @@ const AddLanguage = (props) => {
 	const Banner = () => {
 		if (bannerHighlight == 1) {
 			return (
-				<View style={styles.bigFlagContainer}>
+				<View style={styles.bannerContainer}>
 					<Image style={styles.bigFlag} source={flags[chosenFlagId].src} />
-					<View style={styles.changeFlagInfo}>
-						<Text style={styles.buttonText}>Change Banner</Text>
-					</View>
 				</View>
 			);
 		} else {
 			return (
-				<View style={styles.choose}>
-					<Icon name='help-circle' size={50} color='white' />
-					<Text style={styles.buttonText}>Choose a banner</Text>
+				<View style={styles.bannerContainer}>
+					<View style={styles.choose}>
+						<Icon name='help-circle' size={50} color='white' />
+						<Text style={styles.buttonText}>Choose a banner</Text>
+					</View>
 				</View>
 			);
 		}
@@ -141,8 +154,14 @@ const AddLanguage = (props) => {
 		}
 	};
 	return (
-		<KeyboardAvoidingView style={styles.container}>
+		<KeyboardAvoidingView
+			keyboardVerticalOffset={headerHeight}
+			behavior='padding'
+			style={styles.container}>
 			<View style={styles.inputContainer}>
+				<TouchableOpacity onPress={() => setModalVisible(true)}>
+					<Banner />
+				</TouchableOpacity>
 				<TextInput
 					placeholder='New Language Name'
 					value={languageName}
@@ -151,9 +170,6 @@ const AddLanguage = (props) => {
 					}}
 					style={styles.input}
 				/>
-				<TouchableOpacity onPress={() => setModalVisible(true)}>
-					<Banner />
-				</TouchableOpacity>
 				<TouchableOpacity
 					onPress={() => AddLanguageToDb()}
 					style={styles.login}>
@@ -165,7 +181,6 @@ const AddLanguage = (props) => {
 				transparent={true}
 				visible={modalVisible}
 				onRequestClose={() => {
-					Alert.alert('Modal has been closed.');
 					setModalVisible(!modalVisible);
 				}}>
 				<View style={styles.container}>
@@ -204,14 +219,14 @@ const styles = StyleSheet.create({
 		height: 60,
 		width: 90,
 	},
-	bigFlagContainer: {
+	bannerContainer: {
 		alignItems: 'center',
-		paddingVertical: 30,
+		paddingVertical: 10,
 		margin: 15,
 	},
 	bigFlag: {
-		width: 300,
-		height: 200,
+		width: 250,
+		height: 167,
 	},
 	image: {
 		height: 100,
@@ -220,6 +235,7 @@ const styles = StyleSheet.create({
 	},
 	inputContainer: {
 		width: '80%',
+		alignContent: 'center',
 	},
 	input: {
 		backgroundColor: '#fff',
@@ -227,22 +243,19 @@ const styles = StyleSheet.create({
 		marginVertical: 3,
 		borderRadius: 5,
 	},
+	bannerContainer: {
+		paddingVertical: 10,
+		margin: 15,
+		alignItems: 'center',
+	},
 	choose: {
+		width: 250,
+		height: 167,
 		backgroundColor: '#3d475e',
 		borderRadius: 5,
 		justifyContent: 'center',
 		alignItems: 'center',
 		paddingVertical: 30,
-		margin: 15,
-	},
-	changeFlagInfo: {
-		backgroundColor: '#3d475e',
-		borderBottomLeftRadius: 5,
-		borderBottomRightRadius: 5,
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingVertical: 10,
-		width: 200,
 	},
 	login: {
 		backgroundColor: '#FF8DA1',
