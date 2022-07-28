@@ -28,7 +28,6 @@ import Stats from './Stats';
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-
 const Item = ({ deckName, cardCount, mastery, navigation }) => (
 	<TouchableOpacity
 		onPress={() => {
@@ -73,15 +72,9 @@ const Item = ({ deckName, cardCount, mastery, navigation }) => (
 );
 
 const Scrollable = (props) => {
-	const [decks, setDecks] = React.useState();
-	const [refreshing, setRefreshing] = React.useState(false);
-	const [cardCount, setCardCount] = React.useState(0);
-	const [mastery, setMastery] = React.useState(0);
-	const [bannerMode, setBannerMode] = React.useState(0);
-	const [flagId, setFlagId] = React.useState(0);
 	const [languageSelectModal, setLanguageSelectModal] = React.useState(false);
-	const [langs, setLangs] = React.useState();
 	const navigation = props.navigation;
+	const [refreshing, setRefreshing] = React.useState(false);
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
@@ -91,55 +84,11 @@ const Scrollable = (props) => {
 			),
 		});
 	}, [navigation]);
-	useEffect(() => {
-		Refresh();
-	}, []);
 	const Refresh = () => {
 		setRefreshing(true);
-	};
-	useEffect(async () => {
-		const language = await getDoc(
-			doc(db, 'users/' + userEmailGlobal + '/languages/', languageGlobal)
-		);
-		setBannerMode(language.data().bannerMode);
-		setFlagId(language.data().flagId);
-
-		const snap = await getDocs(
-			collection(
-				db,
-				'users/' + userEmailGlobal + '/languages/' + languageGlobal + '/decks'
-			)
-		);
-		const decks = [];
-		snap.forEach((doc) => {
-			const data = doc.data();
-			decks.push(data);
-		});
-		if (decks) {
-			var cardCounter = 0;
-			var totalMastery = 0;
-			setDecks(decks);
-			decks.forEach((deck) => {
-				cardCounter += deck.cardCount;
-				totalMastery += deck.mastery;
-			});
-			setCardCount(cardCounter);
-			if (cardCounter != 0)
-				setMastery(Math.round(100 * (totalMastery / (cardCounter * 2))));
-		}
-		console.log(decks);
-		const languages = [];
-		const snapLang = await getDocs(
-			collection(db, 'users/' + userEmailGlobal + '/languages/')
-		);
-		snapLang.forEach((doc) => {
-			const data = doc.data();
-			data.name = doc.id;
-			languages.push(data);
-		});
-		if (languages) setLangs(languages);
+		props.FetchData();
 		wait(1000).then(() => setRefreshing(false));
-	}, [refreshing]);
+	};
 	const renderItem = ({ item }) => (
 		<Item
 			deckName={item.deckName}
@@ -183,10 +132,10 @@ const Scrollable = (props) => {
 	const CallStats = () => {
 		return (
 			<Stats
-				flagId={flagId}
-				bannerMode={bannerMode}
-				cardCount={cardCount}
-				mastery={mastery}
+				flagId={props.flagId}
+				bannerMode={props.bannerMode}
+				cardCount={props.cardCount}
+				mastery={props.mastery}
 				navigation={navigation}
 				setLanguageSelectModal={() => setLanguageSelectModal(true)}
 			/>
@@ -205,7 +154,7 @@ const Scrollable = (props) => {
 				</View>
 				<View style={styles.langList}>
 					<FlatList
-						data={langs}
+						data={props.langs}
 						renderItem={RenderLanguage}
 						keyExtractor={(item) => item.id}
 					/>
@@ -232,7 +181,7 @@ const Scrollable = (props) => {
 			</Modal>
 			<FlatList
 				ListHeaderComponent={CallStats}
-				data={decks}
+				data={props.decks}
 				renderItem={renderItem}
 				keyExtractor={(item) => item.id}
 				refreshControl={

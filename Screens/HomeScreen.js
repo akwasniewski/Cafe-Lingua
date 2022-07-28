@@ -17,13 +17,87 @@ import AddDeck from '../Components/AddDeck';
 import SettingsScreen from './SettingsScreen';
 import Icon from 'react-native-vector-icons/Feather';
 import AddLanguage from '../Components/AddLanguage';
+import {
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	updateDoc,
+} from 'firebase/firestore';
+import { db } from '../Database/firebase';
+import { userEmailGlobal } from '../App';
 import { languageGlobal } from '../App';
+const wait = (timeout) => {
+	return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 const Home = (props) => {
+	const [decks, setDecks] = React.useState();
+	const [cardCount, setCardCount] = React.useState(0);
+	const [mastery, setMastery] = React.useState(0);
+	const [bannerMode, setBannerMode] = React.useState(0);
+	const [flagId, setFlagId] = React.useState(0);
+	const [langs, setLangs] = React.useState();
+	const [refreshing, setRefreshing] = React.useState(false);
+
+	useEffect(() => {
+		FetchData();
+	}, [languageGlobal]);
+	const FetchData = async () => {
+		const language = await getDoc(
+			doc(db, 'users/' + userEmailGlobal + '/languages/', languageGlobal)
+		);
+		setBannerMode(language.data().bannerMode);
+		setFlagId(language.data().flagId);
+
+		const snap = await getDocs(
+			collection(
+				db,
+				'users/' + userEmailGlobal + '/languages/' + languageGlobal + '/decks'
+			)
+		);
+		const decks = [];
+		snap.forEach((doc) => {
+			const data = doc.data();
+			decks.push(data);
+		});
+		if (decks) {
+			var cardCounter = 0;
+			var totalMastery = 0;
+			setDecks(decks);
+			decks.forEach((deck) => {
+				cardCounter += deck.cardCount;
+				totalMastery += deck.mastery;
+			});
+			setCardCount(cardCounter);
+			if (cardCounter != 0)
+				setMastery(Math.round(100 * (totalMastery / (cardCounter * 2))));
+		}
+		console.log(decks);
+		const languages = [];
+		const snapLang = await getDocs(
+			collection(db, 'users/' + userEmailGlobal + '/languages/')
+		);
+		snapLang.forEach((doc) => {
+			const data = doc.data();
+			data.name = doc.id;
+			languages.push(data);
+		});
+		if (languages) setLangs(languages);
+	};
+
 	const Scroll = ({ navigation }) => {
 		return (
 			<Scrollable
 				setLanguage={(newLanguage) => props.setLanguage(newLanguage)}
 				navigation={navigation}
+				refreshing={refreshing}
+				FetchData={() => FetchData()}
+				decks={decks}
+				cardCount={cardCount}
+				mastery={mastery}
+				bannerMode={bannerMode}
+				flagId={flagId}
+				langs={langs}
 			/>
 		);
 	};
