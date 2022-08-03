@@ -30,48 +30,56 @@ import Stats from './Stats';
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
 };
-const Item = ({ deckName, cardCount, mastery, navigation }) => (
-	<TouchableOpacity
-		onPress={() => {
-			navigation.navigate('DeckOverview', {
-				deckName: deckName,
-				cardCount: cardCount,
-				mastery: mastery,
-			});
-		}}>
-		<View style={styles.item}>
-			<View style={styles.info}>
-				<Text style={styles.title}>{deckName}</Text>
-				<Text>Cards: {cardCount}</Text>
+const Item = ({ deckName, cardCount, mastery, navigation }) => {
+	const deckMastery = Math.round(100 * (mastery / (cardCount * 2)));
+	var borderColor = '#3d475e';
+	if (deckMastery > 74) borderColor = '#C6EBBE';
+	else if (deckMastery > 49) borderColor = '#FFFD98';
+	else if (deckMastery > 24) borderColor = '#FF8DA1';
+	return (
+		<TouchableOpacity
+			onPress={() => {
+				navigation.navigate('DeckOverview', {
+					deckName: deckName,
+					cardCount: cardCount,
+					mastery: mastery,
+				});
+			}}>
+			<View style={styles.item}>
+				<View style={[styles.info, { borderColor: borderColor }]}>
+					<Text style={styles.title}>{deckName}</Text>
+					<Text>Cards: {cardCount}</Text>
+					<Text>Mastery: {deckMastery}%</Text>
+				</View>
+				<View style={styles.controls}>
+					<TouchableOpacity
+						style={styles.learnButton}
+						onPress={() => {
+							if (cardCount > 1) {
+								navigation.navigate('Learn', {
+									deckName: deckName,
+								});
+							} else {
+								Alert.alert(
+									'Not enough cards',
+									'Your deck has to have at least 2 cards to use learn functionality',
+									[
+										{
+											text: 'Ok',
+											style: 'cancel',
+										},
+									]
+								);
+							}
+						}}>
+						<Text style={styles.learn}>Learn</Text>
+						<Icon name='play' size={30} color='white' />
+					</TouchableOpacity>
+				</View>
 			</View>
-			<View style={styles.controls}>
-				<TouchableOpacity
-					style={styles.learnButton}
-					onPress={() => {
-						if (cardCount > 1) {
-							navigation.navigate('Learn', {
-								deckName: deckName,
-							});
-						} else {
-							Alert.alert(
-								'Not enough cards',
-								'Your deck has to have at least 2 cards to use learn functionality',
-								[
-									{
-										text: 'Ok',
-										style: 'cancel',
-									},
-								]
-							);
-						}
-					}}>
-					<Text style={styles.learn}>Learn</Text>
-					<Icon name='play' size={30} color='white' />
-				</TouchableOpacity>
-			</View>
-		</View>
-	</TouchableOpacity>
-);
+		</TouchableOpacity>
+	);
+};
 
 const Scrollable = (props) => {
 	const [languageSelectModal, setLanguageSelectModal] = React.useState(false);
@@ -293,7 +301,7 @@ const styles = StyleSheet.create({
 	},
 	item: {
 		backgroundColor: '#d3d3d3',
-		padding: 20,
+		padding: 10,
 		marginVertical: 8,
 		marginHorizontal: 16,
 		flexDirection: 'row',
@@ -304,6 +312,9 @@ const styles = StyleSheet.create({
 
 	info: {
 		width: '50%',
+		borderLeftWidth: 10,
+		paddingLeft: 5,
+		borderRadius: 5,
 	},
 	inputContainer: {
 		alignItems: 'center',
@@ -389,9 +400,9 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 	},
 	controls: {
-		padding: 10,
 		alignItems: 'center',
 		width: '50%',
+		paddingBottom: 10,
 	},
 });
 
