@@ -32,10 +32,9 @@ const wait = (timeout) => {
 };
 const Item = ({ deckName, cardCount, mastery, navigation }) => {
 	const deckMastery = Math.round(100 * (mastery / (cardCount * 2)));
-	var borderColor = '#3d475e';
-	if (deckMastery > 74) borderColor = '#C6EBBE';
-	else if (deckMastery > 49) borderColor = '#FFFD98';
-	else if (deckMastery > 24) borderColor = '#FF8DA1';
+	var borderColor = '#FF8DA1';
+	if (deckMastery > 80) borderColor = '#C6EBBE';
+	else if (deckMastery > 40) borderColor = '#FFFD98';
 	return (
 		<TouchableOpacity
 			onPress={() => {
