@@ -17,6 +17,7 @@ import AddDeck from '../Components/AddDeck';
 import SettingsScreen from './SettingsScreen';
 import Icon from 'react-native-vector-icons/Feather';
 import AddLanguage from '../Components/AddLanguage';
+import LearnAll from '../Components/LearnAll';
 import {
 	collection,
 	doc,
@@ -108,6 +109,9 @@ const Home = (props) => {
 			/>
 		);
 	};
+	const CallLearnAll = ({ navigation, route }) => {
+		return <LearnAll decks={decks} navigation={navigation} route={route} />;
+	};
 	const CallSettings = () => {
 		return (
 			<SettingsScreen
@@ -178,13 +182,12 @@ const Home = (props) => {
 					}}
 				/>
 				<Stack.Screen name='Settings' component={CallSettings} />
-			</Stack.Group>
-			<Stack.Group>
 				<Stack.Screen
 					name='Learn'
 					component={Learn}
 					language={languageGlobal}
 				/>
+				<Stack.Screen name='LearnAll' component={CallLearnAll} />
 			</Stack.Group>
 		</Stack.Navigator>
 	);

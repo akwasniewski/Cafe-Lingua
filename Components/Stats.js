@@ -14,7 +14,24 @@ const Stats = (props) => {
 						</TouchableOpacity>
 					</View>
 
-					<TouchableOpacity style={styles.button}>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => {
+							if (props.cardCount > 1) {
+								props.navigation.navigate('LearnAll');
+							} else {
+								Alert.alert(
+									'Not enough cards',
+									'Your language has to have at least 2 cards to use learn functionality',
+									[
+										{
+											text: 'Ok',
+											style: 'cancel',
+										},
+									]
+								);
+							}
+						}}>
 						<Text style={styles.learn}>Learn all</Text>
 						<Icon name='play' size={40} color='white' />
 					</TouchableOpacity>
