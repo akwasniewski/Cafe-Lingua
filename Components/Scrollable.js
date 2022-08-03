@@ -6,6 +6,7 @@ import {
 	doc,
 	getDoc,
 	getDocs,
+	setDoc,
 	updateDoc,
 } from 'firebase/firestore';
 import { db } from '../Database/firebase';
@@ -21,6 +22,7 @@ import {
 	Alert,
 	Modal,
 	Image,
+	TextInput,
 } from 'react-native';
 import flags from '../assets/flags/getFlags';
 import Icon from 'react-native-vector-icons/Feather';
@@ -73,6 +75,7 @@ const Item = ({ deckName, cardCount, mastery, navigation }) => (
 
 const Scrollable = (props) => {
 	const [languageSelectModal, setLanguageSelectModal] = React.useState(false);
+	const [addDeckModal, setAddDeckModal] = React.useState(false);
 	const navigation = props.navigation;
 	const [refreshing, setRefreshing] = React.useState(false);
 	React.useLayoutEffect(() => {
@@ -138,6 +141,7 @@ const Scrollable = (props) => {
 				mastery={props.mastery}
 				navigation={navigation}
 				setLanguageSelectModal={() => setLanguageSelectModal(true)}
+				setAddDeckModal={() => setAddDeckModal(true)}
 			/>
 		);
 	};
@@ -163,6 +167,70 @@ const Scrollable = (props) => {
 			</View>
 		);
 	};
+	const AddDeck = () => {
+		const [newDeckName, setNewDeckName] = React.useState('');
+		const AddDeckToDb = async (navigation) => {
+			if (newDeckName != '') {
+				try {
+					setDoc(
+						doc(
+							db,
+							'users/' +
+								userEmailGlobal +
+								'/languages/' +
+								languageGlobal +
+								'/decks',
+							newDeckName
+						),
+						{
+							userEmail: userEmailGlobal,
+							deckName: newDeckName,
+							cardCount: 0,
+							mastery: 0,
+						}
+					);
+				} catch (error) {
+					alert(error.message);
+				}
+				navigation.navigate('AddCards', { deckName: newDeckName });
+			} else {
+				Alert.alert("Can't add Deck", 'Inproper deck name', [
+					{
+						text: 'Ok',
+						style: 'cancel',
+					},
+				]);
+			}
+		};
+		return (
+			<View>
+				<View style={styles.modalUtil}>
+					{/*currently it is juest invisible x for better spacing, fix it */}
+					<TouchableOpacity onPress={() => setAddDeckModal(false)}>
+						<Icon name='x-circle' size={30} color='#FF8DA1' />
+					</TouchableOpacity>
+					<Text>Add New Deck</Text>
+					<Icon name='x-circle' size={30} color='white' />
+				</View>
+				<View style={styles.inputContainer}>
+					<TextInput
+						placeholder='New Deck Name'
+						value={newDeckName}
+						onChangeText={(newerDeckName) => {
+							setNewDeckName(newerDeckName);
+						}}
+						style={styles.input}
+						multiline={true}
+					/>
+					<TouchableOpacity
+						onPress={() => AddDeckToDb(navigation)}
+						style={styles.login}>
+						<Text style={styles.buttonText}>Create Deck</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+		);
+	};
 	return (
 		<View style={styles.container}>
 			<Modal
@@ -176,6 +244,20 @@ const Scrollable = (props) => {
 				<View style={styles.modalContainer}>
 					<View style={styles.modalView}>
 						<LanguageSelect />
+					</View>
+				</View>
+			</Modal>
+			<Modal
+				animationType='fade'
+				transparent={true}
+				visible={addDeckModal}
+				onRequestClose={() => {
+					Alert.alert('Modal has been closed.');
+					setAddDeckModal(!addDeckModal);
+				}}>
+				<View style={styles.modalContainer}>
+					<View style={styles.modalView}>
+						<AddDeck />
 					</View>
 				</View>
 			</Modal>
@@ -222,6 +304,31 @@ const styles = StyleSheet.create({
 
 	info: {
 		width: '50%',
+	},
+	inputContainer: {
+		alignItems: 'center',
+		paddingVertical: 30,
+	},
+	input: {
+		backgroundColor: '#eee',
+		padding: 10,
+		marginVertical: 3,
+		borderRadius: 5,
+		width: '80%',
+		fontSize: 20,
+		textAlign: 'center',
+	},
+	login: {
+		backgroundColor: '#FF8DA1',
+		borderRadius: 5,
+		padding: 5,
+		marginVertical: 3,
+		width: '60%',
+	},
+	buttonText: {
+		color: '#fff',
+		fontSize: 25,
+		textAlign: 'center',
 	},
 	learnButton: {
 		flexDirection: 'row',

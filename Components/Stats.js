@@ -39,9 +39,7 @@ const Stats = (props) => {
 					</TouchableOpacity>*/}
 				<TouchableOpacity
 					style={styles.editButton}
-					onPress={() => {
-						props.navigation.navigate('AddDeck');
-					}}>
+					onPress={props.setAddDeckModal}>
 					<Icon name='plus' color='#ffffff' size={26} />
 				</TouchableOpacity>
 			</View>

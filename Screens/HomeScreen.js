@@ -171,14 +171,6 @@ const Home = (props) => {
 					language={languageGlobal}
 				/>
 				<Stack.Screen
-					name='AddDeck'
-					component={AddDeck}
-					language={languageGlobal}
-					options={{
-						headerTitle: 'Add Deck',
-					}}
-				/>
-				<Stack.Screen
 					name='AddAnotherLanguage'
 					component={AddLanguageMain}
 					options={{
