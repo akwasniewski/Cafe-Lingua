@@ -124,7 +124,7 @@ const Learn = ({ route, navigation }) => {
 					{ weight: card.weight }
 				);
 			}
-			deckMastery += card.weight - 1;
+			if (card.weight != 0) deckMastery += card.weight - 1;
 			cardsProcessed += 1;
 			// not elegant indeed but works
 			// TODO: make it nice and async
