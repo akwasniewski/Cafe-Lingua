@@ -42,7 +42,7 @@ const LearnAll = (props) => {
 	const Save = async () => {
 		if (!cardsGlobal) {
 			console.log('nocards');
-			navigation.goBack();
+			navigation.pop();
 		}
 		const newDecks = decks;
 		var deckMastery = 0;
@@ -91,7 +91,7 @@ const LearnAll = (props) => {
 					}
 				});
 				props.setDecks(newDecks);
-				navigation.goBack();
+				navigation.pop();
 			}
 		});
 	};

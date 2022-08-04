@@ -20,7 +20,7 @@ const Stats = (props) => {
 						style={styles.button}
 						onPress={() => {
 							if (props.cardCount > 1) {
-								props.navigation.navigate('LearnAll');
+								props.navigation.push('LearnAll');
 							} else {
 								Alert.alert(
 									'Not enough cards',
