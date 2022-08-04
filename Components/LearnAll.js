@@ -44,7 +44,6 @@ const LearnAll = (props) => {
 			console.log('nocards');
 			navigation.pop();
 		}
-		const newDecks = decks;
 		var deckMastery = 0;
 		var cardsProcessed = 0;
 		cardsGlobal.forEach(async (card) => {
@@ -64,7 +63,7 @@ const LearnAll = (props) => {
 					{ weight: card.weight }
 				);
 				var masteryChange = 0;
-				const cardDeck = newDecks.find((x) => x.deckName == card.deckName);
+				const cardDeck = decks.find((x) => x.deckName == card.deckName);
 				if (card.oldWeight != 0) masteryChange = card.weight - card.oldWeight;
 				else masteryChange = card.weight - 1;
 				cardDeck.mastery += masteryChange;
@@ -74,8 +73,8 @@ const LearnAll = (props) => {
 			// not elegant indeed but works
 			// TODO: make it nice and async
 			if (cardsProcessed == cardsGlobal.length) {
-				newDecks.forEach(async (newDeck) => {
-					if (newDeck.hasChanged) {
+				decks.forEach(async (deck) => {
+					if (deck.hasChanged) {
 						await updateDoc(
 							doc(
 								db,
@@ -84,13 +83,13 @@ const LearnAll = (props) => {
 									'/languages/' +
 									languageGlobal +
 									'/decks/' +
-									newDeck.id
+									deck.id
 							),
-							{ mastery: newDeck.mastery }
+							{ mastery: deck.mastery }
 						);
 					}
 				});
-				props.setDecks(newDecks);
+				props.setDecks(decks);
 				navigation.pop();
 			}
 		});
@@ -121,8 +120,12 @@ const LearnAll = (props) => {
 		}
 	};
 	React.useEffect(async () => {
+		while (newCards.length > 0) {
+			newCards.pop();
+		}
 		//getting cards from the server
 		decks.forEach((deck) => {
+			deck.hasChanged = false;
 			console.log(deck.id);
 			GetCardsFromDeck(deck);
 		});
