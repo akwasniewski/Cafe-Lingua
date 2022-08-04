@@ -120,6 +120,23 @@ const Home = (props) => {
 			/>
 		);
 	};
+	const ChangeDeck = (deckName, deckMastery) => {
+		const changedDeck = decks.find((x) => x.deckName == deckName);
+		const oldMastery = changedDeck.mastery;
+		setMastery(mastery + deckMastery - oldMastery);
+		changedDeck.mastery = deckMastery;
+	};
+	const CallLearn = ({ navigation, route }) => {
+		return (
+			<Learn
+				ChangeDeck={(deckName, deckMastery) =>
+					ChangeDeck(deckName, deckMastery)
+				}
+				navigation={navigation}
+				route={route}
+			/>
+		);
+	};
 	const CallSettings = () => {
 		return (
 			<SettingsScreen
@@ -192,7 +209,7 @@ const Home = (props) => {
 				<Stack.Screen name='Settings' component={CallSettings} />
 				<Stack.Screen
 					name='Learn'
-					component={Learn}
+					component={CallLearn}
 					language={languageGlobal}
 				/>
 				<Stack.Screen name='LearnAll' component={CallLearnAll} />

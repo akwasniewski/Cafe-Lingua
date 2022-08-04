@@ -19,7 +19,9 @@ const getRandomInt = (max) => {
 	return Math.floor(Math.random() * max);
 };
 var cardsGlobal = [];
-const Learn = ({ route, navigation }) => {
+const Learn = (props) => {
+	const route = props.route;
+	const navigation = props.navigation;
 	const { deckName } = route.params;
 	const { backKey } = route.params;
 	const { mastery } = route.params;
@@ -145,6 +147,7 @@ const Learn = ({ route, navigation }) => {
 					),
 					{ mastery: deckMastery }
 				);
+				props.ChangeDeck(deckName, deckMastery);
 				console.log('deckmast' + deckMastery);
 				navigation.goBack();
 			}
