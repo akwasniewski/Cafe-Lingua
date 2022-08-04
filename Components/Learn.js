@@ -14,6 +14,7 @@ import LearnCard from './LearnCard';
 import { languageGlobal } from '../App';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useIsFocused } from '@react-navigation/native';
+import Loading from './Loading';
 const getRandomInt = (max) => {
 	return Math.floor(Math.random() * max);
 };
@@ -158,7 +159,7 @@ const Learn = ({ route, navigation }) => {
 				/>
 			);
 		} else {
-			return <Text>loading</Text>;
+			return <Loading />;
 		}
 	};
 	return <Output />;
