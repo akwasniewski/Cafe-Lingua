@@ -110,7 +110,14 @@ const Home = (props) => {
 		);
 	};
 	const CallLearnAll = ({ navigation, route }) => {
-		return <LearnAll decks={decks} navigation={navigation} route={route} />;
+		return (
+			<LearnAll
+				decks={decks}
+				navigation={navigation}
+				route={route}
+				setDecks={(newerDecks) => setDecks(newerDecks)}
+			/>
+		);
 	};
 	const CallSettings = () => {
 		return (

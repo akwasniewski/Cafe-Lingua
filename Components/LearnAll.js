@@ -21,7 +21,10 @@ const getRandomInt = (max) => {
 var cardsGlobal = [];
 const newCards = [];
 var decksProcessed = 0;
-const LearnAll = ({ route, navigation, decks }) => {
+const LearnAll = (props) => {
+	const route = props.route;
+	const navigation = props.navigation;
+	const decks = props.decks;
 	const [cards, setCards] = React.useState();
 	const [curCard, setCurCard] = React.useState();
 	React.useLayoutEffect(() => {
@@ -86,12 +89,12 @@ const LearnAll = ({ route, navigation, decks }) => {
 						);
 					}
 				});
+				props.setDecks(newDecks);
 				navigation.goBack();
 			}
 		});
 	};
 	const GetCardsFromDeck = async (deck) => {
-		if (cards) newCards.push(cards);
 		const snap = await getDocs(
 			collection(
 				db,
@@ -112,7 +115,7 @@ const LearnAll = ({ route, navigation, decks }) => {
 			newCards.push(data);
 		});
 		decksProcessed++;
-		if (decksProcessed == decks.length) {
+		if (Number.isInteger(decksProcessed % decks.length)) {
 			setCards(newCards);
 		}
 	};
