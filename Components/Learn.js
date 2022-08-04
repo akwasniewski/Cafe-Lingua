@@ -22,8 +22,11 @@ var cardsGlobal = [];
 const Learn = ({ route, navigation }) => {
 	const { deckName } = route.params;
 	const { backKey } = route.params;
+	const { mastery } = route.params;
+	const { cardCount } = route.params;
 	const [cards, setCards] = React.useState();
 	const [curCard, setCurCard] = React.useState();
+	const [masteryState, setMasteryState] = React.useState(mastery);
 	const isFocused = useIsFocused();
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
@@ -149,14 +152,25 @@ const Learn = ({ route, navigation }) => {
 		});
 	};
 	const Output = () => {
+		var curMastery = Math.round(100 * (masteryState / (cardCount * 2)));
+		var borderColor = '#FF8DA1';
+		if (curMastery > 80) borderColor = '#C6EBBE';
+		else if (curMastery > 40) borderColor = '#FFFD98';
 		if (curCard) {
 			return (
-				<LearnCard
-					curCard={curCard}
-					cards={cards}
-					setCards={(newCards) => setCards(newCards)}
-					RandomCard={() => RandomCard()}
-				/>
+				<View style={styles.container}>
+					<View style={[styles.masteryIndicator, { borderColor: borderColor }]}>
+						<Text style={styles.indicatorText}>{curMastery}%</Text>
+					</View>
+					<LearnCard
+						curCard={curCard}
+						cards={cards}
+						setCards={(newCards) => setCards(newCards)}
+						RandomCard={() => RandomCard()}
+						setMasteryState={(newState) => setMasteryState(newState)}
+						masteryState={masteryState}
+					/>
+				</View>
 			);
 		} else {
 			return <Loading />;
@@ -165,6 +179,28 @@ const Learn = ({ route, navigation }) => {
 	return <Output />;
 };
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	masteryIndicator: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 60,
+		borderWidth: 8,
+		height: 80,
+		width: 80,
+		top: 10,
+		right: 10,
+		position: 'absolute',
+		backgroundColor: '#67B7D1',
+	},
+	indicatorText: {
+		textAlign: 'center',
+		color: '#fff',
+		fontSize: 20,
+	},
 	saveButton: {
 		color: '#ffffff',
 		fontSize: 20,

@@ -57,6 +57,8 @@ const Item = ({ deckName, cardCount, mastery, navigation }) => {
 							if (cardCount > 1) {
 								navigation.navigate('Learn', {
 									deckName: deckName,
+									mastery: mastery,
+									cardCount: cardCount,
 								});
 							} else {
 								Alert.alert(

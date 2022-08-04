@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import flags from '../assets/flags/getFlags';
 import { languageGlobal, userEmailGlobal } from '../App';
 const Stats = (props) => {
+	const langMastery = Math.round(100 * (props.mastery / (props.cardCount * 2)));
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.columnContainer}>
@@ -41,7 +43,7 @@ const Stats = (props) => {
 						<Text style={styles.language}>{languageGlobal}</Text>
 					</View>
 					<Text style={styles.stat}>Cards: {props.cardCount}</Text>
-					<Text style={styles.stat}>Mastery: {props.mastery}% </Text>
+					<Text style={styles.stat}>Mastery: {langMastery}% </Text>
 				</View>
 			</View>
 			<View style={styles.util}>

@@ -71,8 +71,7 @@ const Home = (props) => {
 				totalMastery += deck.mastery;
 			});
 			setCardCount(cardCounter);
-			if (cardCounter != 0)
-				setMastery(Math.round(100 * (totalMastery / (cardCounter * 2))));
+			if (cardCounter != 0) setMastery(totalMastery);
 		}
 		console.log(decks);
 		const languages = [];
@@ -116,6 +115,8 @@ const Home = (props) => {
 				navigation={navigation}
 				route={route}
 				setDecks={(newerDecks) => setDecks(newerDecks)}
+				mastery={mastery}
+				cardCount={cardCount}
 			/>
 		);
 	};

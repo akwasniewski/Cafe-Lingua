@@ -21,6 +21,8 @@ const DeckStats = (props, navigation) => {
 							if (props.cardCount > 1) {
 								props.navigation.navigate('Learn', {
 									deckName: props.deckName,
+									mastery: props.mastery,
+									cardCount: props.cardCount,
 								});
 							} else {
 								Alert.alert(

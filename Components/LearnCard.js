@@ -9,6 +9,11 @@ var borderColor = '#3D475E';
 const LearnCard = (props) => {
 	const [curCard, setCurCard] = React.useState();
 	const Rate = (rate) => {
+		var masteryChange = 0;
+		if (curCard.weight != 0) masteryChange = rate - curCard.weight;
+		else masteryChange = rate - 1;
+		console.log('mastchange' + masteryChange);
+		props.setMasteryState(props.masteryState + masteryChange);
 		const newCards = props.cards;
 		for (const card of newCards) {
 			if (card == props.curCard && card.weight != rate) {
