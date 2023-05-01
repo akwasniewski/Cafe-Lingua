@@ -15,7 +15,7 @@ Hopefully everything works, but nothing is certain as I'm currently not actively
 Prerequisites:
 - Up to date Expo Go app on your smartphone
 
-Just follow [this](exp://u.expo.dev/update/1bb3c916-2dbc-41ce-a7e5-8062fe30622b) link on you smatphone and it will automatically redirect you
+Just follow exp://u.expo.dev/update/1bb3c916-2dbc-41ce-a7e5-8062fe30622b on you smartphone and it will automatically redirect you
 to your expo go app. From there sign up and learn.
 ### Mac via IOS simulator / Mac via expo go
 Prerequisites:
