@@ -1,14 +1,14 @@
 # Cafe Lingua
 ## A flashcard app to accompany your morning espresso
 
-Hi! This project originated as an effort to create an easy to use flashcard app for learning languages. After scouring the market for one suitable for me I realised every one either lacks something I need or is overmwhelmingly complex.
+Hi! This project originated as an effort to create an easy to use flashcard app for learning languages. After scouring the market for one suitable for me I realised every one either lacks something I need or is overwhelmingly complex.
 
 ## Features
 App allows the user to learn a language via easy to use, reversible flashcards. You can add a deck of cards, add multiple languages and review simple stats. In learn mode once you check the answer on the card you can select at what level you had mastered the card what alters how frequent it will come up in the future.
 
 ## Update!
 Did a quick fix to reboot the app as it was uncompatible with current expo go version.
-Hopefully everything works, but nothing is certain as i'm no longer actively supporting this project.
+Hopefully everything works, but nothing is certain as I'm currently not actively supporting this project.
 
 ## Running the app:
 ### Mobile (recomended):
@@ -22,7 +22,7 @@ Prerequisites:
 - Expo
 - Npm
 - Xcode
-- Set up IOS simulator in xcode (If running by simulator)
+- Set up IOS simulator in Xcode (If running by simulator)
 - Up to date Expo Go app on your smartphone (If running via expo go)
 
 To run the app on your pc clone the repo, open your ios simulator and run.
@@ -30,6 +30,6 @@ To run the app on your pc clone the repo, open your ios simulator and run.
 npm install //to install dependencies
 npx expo run //
 ```
-Once expo server launches press i for the app to open in your simulator or scan the qr with your smarphone to open in expo go. (Ignore the errors as it is just an old project migration and most of them originate from that)
+Once expo server launches press i for the app to open in your simulator or scan the qr code with your smarphone to open in expo go. (Ignore the errors as it is just an old project migration and most of them originate from that)
 
 
